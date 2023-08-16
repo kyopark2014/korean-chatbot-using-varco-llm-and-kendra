@@ -89,8 +89,7 @@ def lambda_handler(event, context):
             EndpointName=endpoint_name, 
             ContentType='application/json', 
             Body=json.dumps(payload).encode('utf-8'))                
-        print('response:', response)
-
+        # print('response:', response)
         response_payload = json.loads(response['Body'].read())
         msg = response_payload['result'][0]
             
