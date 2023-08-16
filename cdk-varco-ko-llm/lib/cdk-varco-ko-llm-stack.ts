@@ -16,6 +16,7 @@ const stage = 'dev';
 const s3_prefix = 'docs';
 const projectName = "korean-chatbot-varco";
 const bucketName = `storage-for-${projectName}`;
+const endpoint_name = 'kr-llm-varco-6b';
 
 export class CdkVarcoKoLlmStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -113,6 +114,7 @@ export class CdkVarcoKoLlmStack extends cdk.Stack {
         s3_bucket: s3Bucket.bucketName,
         s3_prefix: s3_prefix,
         callLogTableName: callLogTableName,
+        endpoint_name: endpoint_name
       }
     });     
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
