@@ -91,7 +91,8 @@ def lambda_handler(event, context):
             Body=json.dumps(payload).encode('utf-8'))                
         print('response:', response)
 
-        msg = json.loads(response['Body'].read())
+        response_payload = json.loads(response['Body'].read())
+        msg = response_payload['result'][0]
             
     elif type == 'document':
         object = body
