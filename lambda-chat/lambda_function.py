@@ -64,7 +64,7 @@ llm = SagemakerEndpoint(
 msg = llm("안녕")
 print('msg: ', msg)
 
-pos = msg.rfind('### Assistant:\n')
+pos = msg.rfind('### Assistant:\n')+14
 print('res msg: ', msg[pos:])
 
 
