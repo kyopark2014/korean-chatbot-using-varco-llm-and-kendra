@@ -16,7 +16,7 @@ const stage = 'dev';
 const s3_prefix = 'docs';
 const projectName = "korean-chatbot-varco";
 const bucketName = `storage-for-${projectName}`;
-const endpoint_name = 'kr-llm-varco-6b';
+const endpoint_name = 'endpoint-varco-llm-ko-13b-ist-1';
 
 export class CdkVarcoKoLlmStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
