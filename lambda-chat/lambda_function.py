@@ -61,7 +61,8 @@ llm = SagemakerEndpoint(
     content_handler = content_handler
 )
 
-llm("안녕")
+msg = llm("안녕")
+print('msg: ', msg)
 
 # load documents from s3
 def load_document(file_type, s3_file_name):
