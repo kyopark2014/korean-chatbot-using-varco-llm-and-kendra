@@ -135,11 +135,11 @@ def lambda_handler(event, context):
         
         """
         
-        msg = llm("안녕")
-        print('msg: ', msg)
+        answer = llm(text)
+        print('answer: ', answer)
 
-        pos = msg.rfind('### Assistant:\n')+14
-        print('res msg: ', msg[pos:])        
+        pos = answer.rfind('### Assistant:\n')+15
+        msg = answer[pos:]    
             
     elif type == 'document':
         object = body
