@@ -128,11 +128,14 @@ def lambda_handler(event, context):
         response = client.invoke_endpoint(
             EndpointName=endpoint_name, 
             ContentType='application/json', 
-            Body=json.dumps(payload).encode('utf-8'))                
-        
-        print('response:', response)
+            Body=json.dumps(payload).encode('utf-8'))                        
+        #print('response:', response)
+
         response_payload = json.loads(response['Body'].read())
+        print('response_payload:', response_payload)
+        
         msg = response_payload['result'][0]
+        
             
     elif type == 'document':
         object = body
