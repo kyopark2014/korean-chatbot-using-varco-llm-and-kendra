@@ -64,6 +64,10 @@ llm = SagemakerEndpoint(
 msg = llm("안녕")
 print('msg: ', msg)
 
+pos = msg.rfind('### Assistant:\n')
+print('res msg: ', msg[pos:])
+
+
 # load documents from s3
 def load_document(file_type, s3_file_name):
     s3r = boto3.resource("s3")
@@ -133,7 +137,7 @@ def lambda_handler(event, context):
 
         response_payload = json.loads(response['Body'].read())
         print('response_payload:', response_payload)
-        
+
         msg = response_payload['result'][0]
         
             
