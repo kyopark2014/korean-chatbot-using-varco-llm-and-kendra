@@ -80,9 +80,12 @@ def lambda_handler(event, context):
         payload = {
             "text": text,
             "request_output_len": 512,
-            "repetition_penalty": 1.3,
+            #"repetition_penalty": 1.3,
             #"temperature": 0.5
-            "temperature": 0
+            "repetition_penalty": 1.1,
+            "temperature": 0.9,
+            "top_k": 50,
+            "top_p": 0.9
         }
 
         client = boto3.client('runtime.sagemaker')
