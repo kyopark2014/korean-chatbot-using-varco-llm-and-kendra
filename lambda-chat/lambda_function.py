@@ -28,6 +28,40 @@ s3_prefix = os.environ.get('s3_prefix')
 callLogTableName = os.environ.get('callLogTableName')
 endpoint_name = os.environ.get('endpoint_name')
 
+class ContentHandler(LLMContentHandler):
+    content_type = "application/json"
+    accepts = "application/json"
+
+    def transform_input(self, prompt: str, model_kwargs: dict) -> bytes:
+        input_str = json.dumps({
+            "text" : prompt, **model_kwargs
+        })
+        return input_str.encode('utf-8')
+      
+    def transform_output(self, output: bytes) -> str:
+        response_json = json.loads(output.read().decode("utf-8"))
+        return response_json[0]["generation"]["content"]
+
+content_handler = ContentHandler()
+aws_region = boto3.Session().region_name
+client = boto3.client("sagemaker-runtime")
+parameters = {
+    "request_output_len": 512,
+    "repetition_penalty": 1.1,
+    "temperature": 0.9,
+    "top_k": 50,
+    "top_p": 0.9
+} 
+
+llm = SagemakerEndpoint(
+    endpoint_name = endpoint_name, 
+    region_name = aws_region, 
+    model_kwargs = parameters,
+    endpoint_kwargs={"CustomAttributes": "accept_eula=true"},
+    content_handler = content_handler
+)
+
+
 # load documents from s3
 def load_document(file_type, s3_file_name):
     s3r = boto3.resource("s3")
