@@ -61,13 +61,6 @@ llm = SagemakerEndpoint(
     content_handler = content_handler
 )
 
-msg = llm("안녕")
-print('msg: ', msg)
-
-pos = msg.rfind('### Assistant:\n')+14
-print('res msg: ', msg[pos:])
-
-
 # load documents from s3
 def load_document(file_type, s3_file_name):
     s3r = boto3.resource("s3")
@@ -117,6 +110,7 @@ def lambda_handler(event, context):
     if type == 'text':
         text = body
 
+        """
         payload = {
             "text": text,
             "request_output_len": 512,
@@ -134,12 +128,18 @@ def lambda_handler(event, context):
             ContentType='application/json', 
             Body=json.dumps(payload).encode('utf-8'))                        
         #print('response:', response)
-
         response_payload = json.loads(response['Body'].read())
         print('response_payload:', response_payload)
 
         msg = response_payload['result'][0]
         
+        """
+        
+        msg = llm("안녕")
+        print('msg: ', msg)
+
+        pos = msg.rfind('### Assistant:\n')+14
+        print('res msg: ', msg[pos:])        
             
     elif type == 'document':
         object = body
