@@ -40,7 +40,7 @@ class ContentHandler(LLMContentHandler):
       
     def transform_output(self, output: bytes) -> str:
         response_json = json.loads(output.read().decode("utf-8"))
-        return response_json[0]["generation"]["content"]
+        return response_json["result"][0]
 
 content_handler = ContentHandler()
 aws_region = boto3.Session().region_name
@@ -61,6 +61,7 @@ llm = SagemakerEndpoint(
     content_handler = content_handler
 )
 
+llm("안녕")
 
 # load documents from s3
 def load_document(file_type, s3_file_name):
@@ -127,7 +128,8 @@ def lambda_handler(event, context):
             EndpointName=endpoint_name, 
             ContentType='application/json', 
             Body=json.dumps(payload).encode('utf-8'))                
-        # print('response:', response)
+        
+        print('response:', response)
         response_payload = json.loads(response['Body'].read())
         msg = response_payload['result'][0]
             
