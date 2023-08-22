@@ -166,23 +166,19 @@ def lambda_handler(event, context):
         print('docs size: ', len(docs))
         
         # summerization to show the document
-        #prompt_template = """Write a concise summary of the following:
-
-        #{text}
-                
-        #CONCISE SUMMARY """
-        prompt_template = """다음 내용을 요약해줘:
+        prompt_template = """Write a concise summary of the following:
 
         {text}
                 
-        간략한 요약 """
+        CONCISE SUMMARY """
 
         PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
         chain = load_summarize_chain(llm, chain_type="stuff", prompt=PROMPT)
         summary = chain.run(docs)
         print('summary: ', summary)
 
-        msg = summary
+        pos = summary.rfind('### Assistant:\n')+15
+        msg = summary[pos:] 
                 
     elapsed_time = int(time.time()) - start
     print("total run time(sec): ", elapsed_time)
