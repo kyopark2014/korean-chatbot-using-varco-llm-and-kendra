@@ -11,7 +11,10 @@
 
 이후 아래와 같이 [Available launch methods]로 [SageMaker console]을 선택한 다음에 아래로 스크롤하여 [View in Amazon SageMaker]를 선택합니다.
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/8b0b3344-1c2d-42c0-ba2b-444601a788f4)
+
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/a024b2bf-e68f-4171-9e44-146b76ea187d)
+
+
 
 
 아래와 같이 Model 이름으로 "endpoint-varco-llm-ko-13b-ist-1"을 입력하고 아래로 스크롤하여 [Submit]을 선택합니다.
