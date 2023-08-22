@@ -14,13 +14,11 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 from langchain.chains.summarize import load_summarize_chain
 
-from langchain.vectorstores import FAISS
-from langchain.vectorstores import OpenSearchVectorSearch
 from langchain.document_loaders import CSVLoader
 from langchain.indexes.vectorstore import VectorStoreIndexWrapper
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
-from langchain.embeddings import SagemakerEndpointEmbeddings
+from langchain.retrievers import AmazonKendraRetriever
 
 s3 = boto3.client('s3')
 s3_bucket = os.environ.get('s3_bucket') # bucket name
