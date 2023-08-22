@@ -87,7 +87,7 @@ def load_document(file_type, s3_file_name):
     new_contents = str(contents).replace("\n"," ") 
     print('length: ', len(new_contents))
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500,chunk_overlap=100)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=100)
     texts = text_splitter.split_text(new_contents) 
     print('texts[0]: ', texts[0])
             
@@ -166,11 +166,16 @@ def lambda_handler(event, context):
         print('docs size: ', len(docs))
         
         # summerization to show the document
-        prompt_template = """Write a concise summary of the following:
+        #prompt_template = """Write a concise summary of the following:
+
+        #{text}
+                
+        #CONCISE SUMMARY """
+        prompt_template = """다음 내용을 요약해줘:
 
         {text}
                 
-        CONCISE SUMMARY """
+        간략한 요약 """
 
         PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
         chain = load_summarize_chain(llm, chain_type="stuff", prompt=PROMPT)
