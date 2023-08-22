@@ -6,7 +6,6 @@ import datetime
 from io import BytesIO
 import PyPDF2
 import csv
-import sys
 
 from langchain import PromptTemplate, SagemakerEndpoint
 from langchain.llms.sagemaker_endpoint import LLMContentHandler
@@ -15,7 +14,6 @@ from langchain.docstore.document import Document
 from langchain.chains.summarize import load_summarize_chain
 
 from langchain.document_loaders import CSVLoader
-from langchain.indexes.vectorstore import VectorStoreIndexWrapper
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain.retrievers import AmazonKendraRetriever
@@ -26,7 +24,8 @@ s3_prefix = os.environ.get('s3_prefix')
 callLogTableName = os.environ.get('callLogTableName')
 endpoint_name = os.environ.get('endpoint_name')
 varico_region = os.environ.get('varico_region')
-
+kendraIndex = os.environ.get('kendraIndex')
+roleArn = os.environ.get('roleArn')
 
 class ContentHandler(LLMContentHandler):
     content_type = "application/json"
@@ -60,6 +59,30 @@ llm = SagemakerEndpoint(
     endpoint_kwargs={"CustomAttributes": "accept_eula=true"},
     content_handler = content_handler
 )
+retriever = AmazonKendraRetriever(index_id=kendraIndex)
+
+# store document into Kendra
+def store_document(s3_file_name, requestId):
+    documentInfo = {
+        "S3Path": {
+            "Bucket": s3_bucket,
+            "Key": s3_prefix+'/'+s3_file_name
+        },
+        "Title": s3_file_name,
+        "Id": requestId
+    }
+
+    documents = [
+        documentInfo
+    ]
+
+    kendra = boto3.client("kendra")
+    result = kendra.batch_put_document(
+        Documents = documents,
+        IndexId = kendraIndex,
+        RoleArn = roleArn
+    )
+    print(result)
 
 # load documents from s3
 def load_document(file_type, s3_file_name):
@@ -92,7 +115,79 @@ def load_document(file_type, s3_file_name):
     print('texts[0]: ', texts[0])
             
     return texts
-              
+
+def summerize_text(text):
+    docs = [
+        Document(
+            page_content=text
+        )
+    ]
+    prompt_template = """Write a concise summary of the following:
+
+    {text}
+                
+    CONCISE SUMMARY """
+
+    PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
+    chain = load_summarize_chain(llm, chain_type="stuff", prompt=PROMPT)
+    summary = chain.run(docs)
+    print('summarized text: ', summary)
+
+    return summary
+
+def get_reference(docs):
+    reference = "\n\nFrom\n"
+    for doc in docs:
+        name = doc.metadata['title']
+        page = doc.metadata['document_attributes']['_excerpt_page_number']
+    
+        reference = reference + (str(page)+'page in '+name+'\n')
+    return reference
+
+def get_answer_using_template(query):
+    relevant_documents = retriever.get_relevant_documents(query)
+    print('length of relevant_documents: ', len(relevant_documents))
+
+    if(len(relevant_documents)==0):
+        return llm(query)
+    else:
+        print(f'{len(relevant_documents)} documents are fetched which are relevant to the query.')
+        print('----')
+        for i, rel_doc in enumerate(relevant_documents):
+            print(f'## Document {i+1}: {rel_doc.page_content}.......')
+            print('---')
+
+        prompt_template = """Human: Use the following pieces of context to provide a concise answer to the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
+
+        {context}
+
+        Question: {question}
+        Assistant:"""
+        PROMPT = PromptTemplate(
+            template=prompt_template, input_variables=["context", "question"]
+        )
+
+        qa = RetrievalQA.from_chain_type(
+            llm=llm,
+            chain_type="stuff",
+            retriever=retriever,
+            return_source_documents=True,
+            chain_type_kwargs={"prompt": PROMPT}
+        )
+        result = qa({"query": query})
+        print('result: ', result)
+
+        source_documents = result['source_documents']        
+        print('source_documents: ', source_documents)
+
+        if len(source_documents)>=1:
+            reference = get_reference(source_documents)
+            # print('reference: ', reference)
+
+            return result['result']+reference
+        else:
+            return result['result']
+
 def lambda_handler(event, context):
     print(event)
     userId  = event['user-id']
@@ -104,14 +199,22 @@ def lambda_handler(event, context):
     body = event['body']
     print('body: ', body)
 
+    global llm, kendra
+
     start = int(time.time())    
 
     msg = ""
     
     if type == 'text':
         text = body
-        
-        answer = llm(text)
+
+        querySize = len(text)
+        print('query size: ', querySize)
+
+        if querySize<1000: 
+            answer = get_answer_using_template(text)
+        else:
+            answer = llm(text)        
         print('answer: ', answer)
 
         pos = answer.rfind('### Assistant:\n')+15
@@ -119,29 +222,15 @@ def lambda_handler(event, context):
             
     elif type == 'document':
         object = body
+
+        # stor the object into kendra
+        store_document(object, requestId)
         
         file_type = object[object.rfind('.')+1:len(object)]
         print('file_type: ', file_type)
             
-        # load documents where text, pdf, csv are supported
-        texts = load_document(file_type, object)
-
-        docs = []
-        for i in range(len(texts)):
-            docs.append(
-                Document(
-                    page_content=texts[i],
-                    metadata={
-                        'name': object,
-                        'page':i+1
-                    }
-                )
-            )        
-        print('docs[0]: ', docs[0])    
-        print('docs size: ', len(docs))
-
-
         # summerization to show the document
+        texts = load_document(file_type, object)
         docs = [
             Document(
                 page_content=t
