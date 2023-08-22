@@ -14,9 +14,13 @@
 ![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/8b0b3344-1c2d-42c0-ba2b-444601a788f4)
 
 
-[Endpoint name]으로 "endpoint-varco-llm-ko-13b-ist-1"을 입력합니다.
+아래와 같이 Model 이름으로 "endpoint-varco-llm-ko-13b-ist-1"을 입력하고 아래로 스크롤하여 [Submit]을 선택합니다.
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/afb94242-2f3c-45ee-92ab-7134db87dfda)
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/0bcf8d3a-5e82-4962-bfb6-b991cd0e8ae5)
+
+
+
+
 
 아래로 스크롤하여 [Endpoint configuration name]에 "endpoint-varco-llm-ko-13b-ist-1"을 입력한 후에 아래에서 [Create endpoint configuration]을 선택합니다. 
 
@@ -25,11 +29,9 @@
 ![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/5aba1f72-d86e-46f3-b17b-700f07aed787)
 
 
-아래와 같이 Model 이름으로 "endpoint-varco-llm-ko-13b-ist-1"을 입력하고 아래로 스크롤하여 [Submit]을 선택합니다.
+[Endpoint name]으로 "endpoint-varco-llm-ko-13b-ist-1"을 입력합니다.
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/0bcf8d3a-5e82-4962-bfb6-b991cd0e8ae5)
-
-
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/afb94242-2f3c-45ee-92ab-7134db87dfda)
 
 
 
