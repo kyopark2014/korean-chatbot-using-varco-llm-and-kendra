@@ -122,6 +122,34 @@ pos = summary.rfind('### Assistant:\n') + 15
 msg = summary[pos:]
 ```
 
+### AWS CDK로 인프라 구현하기
+
+[CDK 구현 코드](./cdk-qa-with-rag/README.md)에서는 Typescript로 인프라를 정의하는 방법에 대해 상세히 설명하고 있습니다.
+
+## 직접 실습 해보기
+
+### 사전 준비 사항
+
+이 솔루션을 사용하기 위해서는 사전에 아래와 같은 준비가 되어야 합니다.
+
+- [AWS Account 생성](https://repost.aws/ko/knowledge-center/create-and-activate-aws-account)
+
+
+### CDK를 이용한 인프라 설치
+[인프라 설치](https://github.com/kyopark2014/question-answering-chatbot-using-RAG-based-on-LLM/blob/main/deployment.md)에 따라 CDK로 인프라 설치를 진행합니다. 
+
+
+### 실행결과
+
+### 리소스 정리하기
+
+더이상 인프라를 사용하지 않는 경우에 아래처럼 모든 리소스를 삭제할 수 있습니다. [Cloud9 console](https://ap-northeast-2.console.aws.amazon.com/cloud9control/home?region=ap-northeast-2#/)에 접속하여 아래와 같이 삭제를 합니다.
+
+```java
+cdk destroy
+```
+
+본 실습에서는 Varco LLM의 endpoint로 "ml.g5.12xlarge"를 사용하고 있으므로, 더이상 사용하지 않을 경우에 반드시 삭제하여야 합니다. 특히 cdk destroy 명령어로 Chatbot만 삭제할 경우에 SageMaker Endpoint가 유지되어 지속적으로 비용이 발생될 수 있습니다. 이를 위해 Endpoint Console에 접속해서 Endpoint를 삭제합니다. 마찬가지로 Models과 Endpoint configuration에서 설치한 Varco LLM의 Model과 Configuration을 삭제합니다.
 
 
 ## Reference
