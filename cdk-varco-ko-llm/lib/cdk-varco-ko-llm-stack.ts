@@ -10,13 +10,16 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as apiGateway from 'aws-cdk-lib/aws-apigateway';
 import * as s3Deploy from "aws-cdk-lib/aws-s3-deployment";
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as kendra from 'aws-cdk-lib/aws-kendra';
 
+const region = process.env.CDK_DEFAULT_REGION;   
 const debug = false;
 const stage = 'dev';
 const s3_prefix = 'docs';
 const projectName = "korean-chatbot-varco";
 const bucketName = `storage-for-${projectName}`;
 const endpoint_name = 'endpoint-varco-llm-ko-13b-ist-1';
+const varico_region = "us-west-2";   
 
 export class CdkVarcoKoLlmStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -92,17 +95,74 @@ export class CdkVarcoKoLlmStack extends cdk.Stack {
       description: 'The domain name of the Distribution',
     });
 
+    // Kendra    
+    const roleKendra = new iam.Role(this, `role-kendra-for-${projectName}`, {
+      roleName: `role-kendra-for-${projectName}-${region}`,
+      assumedBy: new iam.CompositePrincipal(
+        new iam.ServicePrincipal("kendra.amazonaws.com")
+      )
+    });
+    const cfnIndex = new kendra.CfnIndex(this, 'MyCfnIndex', {
+      edition: 'DEVELOPER_EDITION',  // ENTERPRISE_EDITION, 
+      name: `reg-kendra-${projectName}`,
+      roleArn: roleKendra.roleArn,
+    });     
+    new cdk.CfnOutput(this, `index-of-kendra-for-${projectName}`, {
+      value: cfnIndex.attrId,
+      description: 'The index of kendra',
+    }); 
+
+    const accountId = process.env.CDK_DEFAULT_ACCOUNT;
+    const kendraResourceArn = `arn:aws:kendra:${region}:${accountId}:index/${cfnIndex.attrId}`
+    if(debug) {
+      new cdk.CfnOutput(this, `resource-arn-of-kendra-for-${projectName}`, {
+        value: kendraResourceArn,
+        description: 'The arn of resource',
+      }); 
+    }           
+    const kendraPolicy = new iam.PolicyStatement({  
+      resources: [kendraResourceArn],      
+      actions: ['kendra:*'],
+    });      
+    roleKendra.attachInlinePolicy( // add kendra policy
+      new iam.Policy(this, `kendra-inline-policy-for-${projectName}`, {
+        statements: [kendraPolicy],
+      }),
+    );      
+
+    // role for lambda chat
     const roleLambda = new iam.Role(this, `role-lambda-chat-for-${projectName}`, {
       roleName: `role-lambda-chat-for-${projectName}`,
       assumedBy: new iam.CompositePrincipal(
         new iam.ServicePrincipal("lambda.amazonaws.com"),
+        new iam.ServicePrincipal("kendra.amazonaws.com")
       )
     });
     roleLambda.addManagedPolicy({
       managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
     });
+    roleLambda.attachInlinePolicy( // add kendra policy
+      new iam.Policy(this, `lambda-inline-policy-for-kendra-in-${projectName}`, {
+        statements: [kendraPolicy],
+      }),
+    );  
 
-    // Lambda for chat using langchain (container)
+    const passRoleResourceArn = roleLambda.roleArn;
+    const passRolePolicy = new iam.PolicyStatement({  
+      resources: [passRoleResourceArn],      
+      actions: ['iam:PassRole'],
+    });
+    roleLambda.attachInlinePolicy( // add pass role policy
+      new iam.Policy(this, `pass-role-of-kendra-for-${projectName}`, {
+        statements: [passRolePolicy],
+      }), 
+    );
+    new cdk.CfnOutput(this, `passRole-resource-arn-of-kendra-for-${projectName}`, {
+      value: passRoleResourceArn,
+      description: 'The arn of pass role',
+    }); 
+
+    // Lambda for chat 
     const lambdaChatApi = new lambda.DockerImageFunction(this, `lambda-chat-for-${projectName}`, {
       description: 'lambda for chat api',
       functionName: `lambda-chat-api-for-${projectName}`,
@@ -114,7 +174,10 @@ export class CdkVarcoKoLlmStack extends cdk.Stack {
         s3_bucket: s3Bucket.bucketName,
         s3_prefix: s3_prefix,
         callLogTableName: callLogTableName,
-        endpoint_name: endpoint_name
+        varico_region: varico_region,
+        endpoint_name: endpoint_name,
+        kendraIndex: cfnIndex.attrId,
+        roleArn: roleLambda.roleArn,               
       }
     });     
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
@@ -131,7 +194,7 @@ export class CdkVarcoKoLlmStack extends cdk.Stack {
       }),
     );
 
-    // role
+    // role for API Gateway
     const role = new iam.Role(this, `api-role-for-${projectName}`, {
       roleName: `api-role-for-${projectName}`,
       assumedBy: new iam.ServicePrincipal("apigateway.amazonaws.com")

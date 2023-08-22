@@ -27,6 +27,8 @@ s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 callLogTableName = os.environ.get('callLogTableName')
 endpoint_name = os.environ.get('endpoint_name')
+varico_region = os.environ.get('varico_region')
+
 
 class ContentHandler(LLMContentHandler):
     content_type = "application/json"
@@ -55,7 +57,7 @@ parameters = {
 
 llm = SagemakerEndpoint(
     endpoint_name = endpoint_name, 
-    region_name = aws_region, 
+    region_name = varico_region, 
     model_kwargs = parameters,
     endpoint_kwargs={"CustomAttributes": "accept_eula=true"},
     content_handler = content_handler
