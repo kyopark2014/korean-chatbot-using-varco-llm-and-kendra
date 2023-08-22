@@ -74,7 +74,8 @@ def load_document(file_type, s3_file_name):
         for page in reader.pages:
             raw_text.append(page.extract_text())
         contents = '\n'.join(raw_text)            
-        contents.replace('\x00', '')
+        #contents.replace('\x00', '')
+        contents.rstrip('\x00')
         #print('contents: ', contents)
         
     elif file_type == 'txt':        
