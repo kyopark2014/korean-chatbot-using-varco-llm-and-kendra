@@ -67,12 +67,12 @@ def load_document(file_type, s3_file_name):
     doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
     
     if file_type == 'pdf':
-        contents = doc.get()['Body'].read().decode('utf-8')
+        contents = doc.get()['Body'].read()
         reader = PyPDF2.PdfReader(BytesIO(contents))
         
         raw_text = []
         for page in reader.pages:
-            raw_text.append(page.extract_text())
+            raw_text.append(page.extract_text().decode('utf-8'))
         contents = '\n'.join(raw_text)    
         
     elif file_type == 'txt':        
