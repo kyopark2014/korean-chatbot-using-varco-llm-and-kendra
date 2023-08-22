@@ -164,6 +164,14 @@ def lambda_handler(event, context):
             )        
         print('docs[0]: ', docs[0])    
         print('docs size: ', len(docs))
+
+
+        # summerization to show the document
+        docs = [
+            Document(
+                page_content=t
+            ) for t in texts[:3]
+        ]
         
         # summerization to show the document
         prompt_template = """Write a concise summary of the following:
