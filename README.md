@@ -154,6 +154,9 @@ cdk destroy
 
 ## Reference
 
+[NC - github](https://ncsoft.github.io/ncresearch/varco-llm/)
+
+### invode_endpoint API 사용 예제
 LangChain없이 API를 이용하여 아래와 같이 응답을 얻을 수 있습니다.
 
 ```python
