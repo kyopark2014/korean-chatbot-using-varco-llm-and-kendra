@@ -1,6 +1,10 @@
 # VARCO LLM을 이용하여 간단한 한국어 Chatbot 구현하기
 
-여기서는 [VARCO LLM](https://ncsoft.github.io/ncresearch/varco-llm/)을 이용하여 LangChain 기반으로 한국어 Chatbot을 구현하고자 합니다. VARCO LLM은 엔씨소프트(NC SOFT)에서 제공하는 대용량 언어 모델(LLM)입니다. VARCO LLM KO-13B-IST는 VARCO LLM KO-13B-FM의 파인튜닝 모델로서 Question and Answering, Summarization등 다양한 태스크에 활용할 수 있습니다. VARCO LLM은 [Amazon SageMaker](https://aws.amazon.com/marketplace/seller-profile?id=seller-tkuvdeznmi2w4)를 이용하여 쉽게 배포하여 사용할 수 있습니다.
+여기서는 [VARCO LLM](https://ncsoft.github.io/ncresearch/varco-llm/)을 이용하여 LangChain 기반으로 한국어 Chatbot을 구현하고자 합니다. VARCO LLM은 엔씨소프트(NC SOFT)에서 제공하는 대용량 언어 모델(LLM)입니다. VARCO LLM KO-13B-IST는 VARCO LLM KO-13B-FM의 파인튜닝 모델로서 Question and Answering, Summarization등 다양한 태스크에 활용할 수 있습니다. VARCO LLM은 [Amazon SageMaker](https://aws.amazon.com/marketplace/seller-profile?id=seller-tkuvdeznmi2w4)를 이용하여 쉽게 배포하여 사용할 수 있습니다. 
+
+LangChain은 LLM application의 개발을 도와주는 Framework으로 Question anc Answering, Summarization등 다양한 task에 맞게 Chain등을 활용하여 편리하게 개발할 수 있습니다.
+
+## LangChain과 연동하기 
 
 VARCO LLM의 입력과 출력의 포맷을 맞추어서 아래와 같이 ContentHandler를 정의합니다. 
 
