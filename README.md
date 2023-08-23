@@ -1,29 +1,5 @@
 # VARCO LLM을 이용하여 간단한 한국어 Chatbot 구현하기
 
-
-## 문제점 확인중
-
-SageMaker Endpoint를 이용할때에 LangChain으로 kendra의 retriever를 정의할때 아래와 같은 에러가 발생하여 추가 진행이 안되고 있습니다. 이것은 LangChain에서 get_relevant_documents관련 수정이 필요한것으로 보여집니다. 따라서 추후 아래 내용을 다시 테스트할 예정입니다.
-
-```text
-[ERROR] AttributeError: 'kendra' object has no attribute 'retrieve'
-Traceback (most recent call last):
-  File "/var/task/lambda_function.py", line 215, in lambda_handler
-    answer = get_answer_using_template(text)
-  File "/var/task/lambda_function.py", line 148, in get_answer_using_template
-    relevant_documents = retriever.get_relevant_documents(query)
-  File "/var/lang/lib/python3.8/site-packages/langchain/schema/retriever.py", line 208, in get_relevant_documents
-    raise e
-  File "/var/lang/lib/python3.8/site-packages/langchain/schema/retriever.py", line 201, in get_relevant_documents
-    result = self._get_relevant_documents(
-  File "/var/lang/lib/python3.8/site-packages/langchain/retrievers/kendra.py", line 421, in _get_relevant_documents
-    result_items = self._kendra_query(query)
-  File "/var/lang/lib/python3.8/site-packages/langchain/retrievers/kendra.py", line 390, in _kendra_query
-    response = self.client.retrieve(**kendra_kwargs)
-  File "/var/runtime/botocore/client.py", line 876, in __getattr__
-    raise AttributeError(
-```
-
 여기서는 [VARCO LLM](https://ncsoft.github.io/ncresearch/varco-llm/)을 이용하여 LangChain 기반으로 한국어 Chatbot을 구현하고자 합니다. VARCO LLM은 엔씨소프트(NC SOFT)에서 제공하는 대용량 언어 모델(LLM)입니다. VARCO LLM KO-13B-IST는 VARCO LLM KO-13B-FM의 파인튜닝 모델로서 Question and Answering, Summarization등 다양한 태스크에 활용할 수 있습니다. VARCO LLM은 [Amazon SageMaker](https://aws.amazon.com/marketplace/seller-profile?id=seller-tkuvdeznmi2w4)를 이용하여 쉽게 배포하여 사용할 수 있습니다. 
 
 ## LangChain과 연동하기 
@@ -223,4 +199,30 @@ response = client.invoke_endpoint(
 response_payload = json.loads(response['Body'].read())
 
 msg = response_payload['result'][0]
+```
+
+
+## Troubleshooting
+
+## 문제점 확인중
+
+SageMaker Endpoint를 이용할때에 LangChain으로 kendra의 retriever를 정의할때 아래와 같은 에러가 발생하였습니다. 결과적으로 Dockerfile의 Python version을 v3.9에서 v3.11로 변경후 해결되었습니다.
+
+```text
+[ERROR] AttributeError: 'kendra' object has no attribute 'retrieve'
+Traceback (most recent call last):
+  File "/var/task/lambda_function.py", line 215, in lambda_handler
+    answer = get_answer_using_template(text)
+  File "/var/task/lambda_function.py", line 148, in get_answer_using_template
+    relevant_documents = retriever.get_relevant_documents(query)
+  File "/var/lang/lib/python3.8/site-packages/langchain/schema/retriever.py", line 208, in get_relevant_documents
+    raise e
+  File "/var/lang/lib/python3.8/site-packages/langchain/schema/retriever.py", line 201, in get_relevant_documents
+    result = self._get_relevant_documents(
+  File "/var/lang/lib/python3.8/site-packages/langchain/retrievers/kendra.py", line 421, in _get_relevant_documents
+    result_items = self._kendra_query(query)
+  File "/var/lang/lib/python3.8/site-packages/langchain/retrievers/kendra.py", line 390, in _kendra_query
+    response = self.client.retrieve(**kendra_kwargs)
+  File "/var/runtime/botocore/client.py", line 876, in __getattr__
+    raise AttributeError(
 ```
