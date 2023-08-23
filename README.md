@@ -160,6 +160,10 @@ msg = summary[pos:]
 
 ### 실행결과
 
+한글파일을 올리고 관련 질문을 하면 아래와 같이 파일을 참조하여 응답을 얻을 수 있습니다. 
+
+![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/8a152ebd-8010-4918-b81c-4d579ec46018)
+
 ### 리소스 정리하기
 
 더이상 인프라를 사용하지 않는 경우에 아래처럼 모든 리소스를 삭제할 수 있습니다. [Cloud9 console](https://us-west-2.console.aws.amazon.com/cloud9control/home?region=us-west-2#/)에 접속하여 아래와 같이 삭제를 합니다.
