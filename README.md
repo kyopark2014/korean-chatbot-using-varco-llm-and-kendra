@@ -213,9 +213,9 @@ msg = response_payload['result'][0]
 ```
 
 
-## Troubleshooting
+### Troubleshooting
 
-### Error: AttributeError: 'kendra' object has no attribute 'retrieve'
+#### Error: AttributeError: 'kendra' object has no attribute 'retrieve'
 
 SageMaker Endpoint를 이용할때에 LangChain으로 kendra의 retriever를 정의할때 아래와 같은 에러가 발생하였습니다. 결과적으로 Dockerfile의 Python version을 v3.9에서 v3.11로 변경후 해결되었습니다.
 
