@@ -1,6 +1,6 @@
 # Varco LLM을 이용하여 간단한 한국어 Chatbot 구현하기
 
-[Varco LLM](https://ncsoft.github.io/ncresearch/varco-llm/)은 NC Soft에서 제공하는 대용량 언어 모델(LLM)입니다. Varco LLM KO-13B-IST는 Varco LLM KO-13B-FM의 파인튜닝 모델로서 Question and Answering, Summarization등 다양한 태스크에 활용할 수 있습니다.
+[Varco LLM](https://ncsoft.github.io/ncresearch/varco-llm/)은 NC Soft에서 제공하는 대용량 언어 모델(LLM)입니다. Varco LLM KO-13B-IST는 Varco LLM KO-13B-FM의 파인튜닝 모델로서 Question and Answering, Summarization등 다양한 태스크에 활용할 수 있습니다. Varco LLM은 [Amazon SageMaker](https://aws.amazon.com/marketplace/seller-profile?id=seller-tkuvdeznmi2w4)를 이용하여 쉽게 배포하여 사용할 수 있습니다.
 
 Varco LLM의 입력과 출력의 포맷을 맞추어서 아래와 같이 ContentHandler를 정의합니다. 
 
