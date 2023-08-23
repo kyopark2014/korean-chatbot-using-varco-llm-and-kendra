@@ -182,15 +182,12 @@ def get_answer_using_template(query):
     source_documents = result['source_documents']        
     print('source_documents: ', source_documents)
     
-    #if len(source_documents)>=1:
-    #    reference = get_reference(source_documents)
+    if len(source_documents)>=1:
+        reference = get_reference(source_documents)
         # print('reference: ', reference)
-
-    #    return result['result']+reference
-    #else:
-    #    return result['result']
-    
-    return result['result']
+        return result['result']+reference
+    else:
+        return result['result']
 
 def lambda_handler(event, context):
     print(event)
