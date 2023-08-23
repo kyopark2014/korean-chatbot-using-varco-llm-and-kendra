@@ -22,7 +22,7 @@ class ContentHandler(LLMContentHandler):
         return response_json["result"][0]
 ```
 
-Varco LLM은 SageMaker endpoint를 이용하여 접근할 수 있습니다. 아래와 같이 ContentHandler를 이용하여 LangChain을 연결합니다. 
+VARCO LLM은 SageMaker endpoint를 이용하여 접근할 수 있습니다. 아래와 같이 ContentHandler를 이용하여 LangChain을 연결합니다. 
 
 ```python
 content_handler = ContentHandler()
@@ -96,7 +96,7 @@ def load_document(file_type, s3_file_name):
 
 ## 답변하기
 
-Varco는 User의 요청을 같이 전달하고 응답은 "### Assistant:" 포맷으로 전달되므로, LLM의 응답에서 답변만 골라서 메시지로 전달합니다.
+VARCO는 User의 요청을 같이 전달하고 응답은 "### Assistant:" 포맷으로 전달되므로, LLM의 응답에서 답변만 골라서 메시지로 전달합니다.
 
 ```python
 answer = llm(text)
@@ -176,7 +176,7 @@ msg = summary[pos:]
 cdk destroy
 ```
 
-본 실습에서는 Varco LLM의 endpoint로 "ml.g5.12xlarge"를 사용하고 있으므로, 더이상 사용하지 않을 경우에 반드시 삭제하여야 합니다. 특히 cdk destroy 명령어로 Chatbot만 삭제할 경우에 SageMaker Endpoint가 유지되어 지속적으로 비용이 발생될 수 있습니다. 이를 위해 Endpoint Console에 접속해서 Endpoint를 삭제합니다. 마찬가지로 Models과 Endpoint configuration에서 설치한 Varco LLM의 Model과 Configuration을 삭제합니다.
+본 실습에서는 VARCO LLM의 endpoint로 "ml.g5.12xlarge"를 사용하고 있으므로, 더이상 사용하지 않을 경우에 반드시 삭제하여야 합니다. 특히 cdk destroy 명령어로 Chatbot만 삭제할 경우에 SageMaker Endpoint가 유지되어 지속적으로 비용이 발생될 수 있습니다. 이를 위해 Endpoint Console에 접속해서 Endpoint를 삭제합니다. 마찬가지로 Models과 Endpoint configuration에서 설치한 VARCO LLM의 Model과 Configuration을 삭제합니다.
 
 ## 결론
 
@@ -186,7 +186,7 @@ cdk destroy
 
 [NC - github](https://ncsoft.github.io/ncresearch/varco-llm/)
 
-[Deploy Varco LLM Model 13B IST Package from AWS Marketplace](https://github.com/ncsoft/ncresearch/blob/main/notebooks/varco_model_13_IST.ipynb)
+[Deploy VARCO LLM Model 13B IST Package from AWS Marketplace](https://github.com/ncsoft/ncresearch/blob/main/notebooks/varco_model_13_IST.ipynb)
 
 ### invode_endpoint API 사용 예제
 LangChain없이 API를 이용하여 아래와 같이 응답을 얻을 수 있습니다.
