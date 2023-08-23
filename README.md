@@ -173,6 +173,8 @@ cdk destroy
 
 [NC - github](https://ncsoft.github.io/ncresearch/varco-llm/)
 
+[Deploy Varco LLM Model 13B IST Package from AWS Marketplace](https://github.com/ncsoft/ncresearch/blob/main/notebooks/varco_model_13_IST.ipynb)
+
 ### invode_endpoint API 사용 예제
 LangChain없이 API를 이용하여 아래와 같이 응답을 얻을 수 있습니다.
 
