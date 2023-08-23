@@ -4,7 +4,7 @@
 
 전체적인 Architecture는 아래와 같습니다. 사용자의 Question은 Query로 [Amazon CloudFront](https://aws.amazon.com/ko/cloudfront/)와 [Amazon API Gateway](https://aws.amazon.com/ko/api-gateway/)를 거쳐서, Lambda에 전달됩니다. Lambda는 Kendra로 Query를 전달하여 관련된 문서들의 발췌를 받은후에 VARCO LLM에 전달하여 답변을 얻습니다. 이후 답변은 사용자에게 전달되어 채팅화면에 표시됩니다.
 
-![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/b0d38264-3a65-4c89-8477-cb8f291b6ebf)
+<img src="https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/b0d38264-3a65-4c89-8477-cb8f291b6ebf" width="700">
 
 
 ## LangChain과 연동하기 
