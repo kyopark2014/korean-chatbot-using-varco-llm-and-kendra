@@ -55,7 +55,7 @@ VARCO LLM의 parameter는 아래와 같습니다.
 - repetition_penalty: 반복을 제한하기 위한 파라미터로 1.0이면 no panalty입니다. 기본값은 1.3입니다.
 - temperature: 다음 token의 확율(probability)로서 기본값은 0.5입니다.
 
-Output은 Json 형태로 전달되며 기본 포맷은 아래와 같습니다.
+VARCO LLM의 Output은 Json 형태로 전달되며 기본 포맷은 아래와 같습니다.
 
 ```java
 {
@@ -65,85 +65,103 @@ Output은 Json 형태로 전달되며 기본 포맷은 아래와 같습니다.
 }
 ```
 
-## 문서 읽기
+### 문서를 Kendra에 올리기
 
-S3에서 PDF, TXT, CSV 파일을 아래처럼 읽어올 수 있습니다. pdf의 경우에 PyPDF2를 이용하여 PDF파일에서 page 단위로 읽어옵니다. 이때, 불필요한 '\x00', '\x01'은 아래와 같이 제거합니다. 또한 LLM의 token size 제한을 고려하여, 아래와 같이 RecursiveCharacterTextSplitter을 이용하여 chunk 단위로 문서를 나눕니다. 
+사용자가 문서를 선택하여 Amazon S3에 올린 후에, 아래와 같이 [batch_put_document](https://docs.aws.amazon.com/ko_kr/kendra/latest/dg/in-adding-binary-doc.html)를 이용하여 Kendra에 등록을 요청합니다.
 
 ```python
-def load_document(file_type, s3_file_name):
-    s3r = boto3.resource("s3")
-    doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
-    
-    if file_type == 'pdf':
-        contents = doc.get()['Body'].read()
-        reader = PyPDF2.PdfReader(BytesIO(contents))
-        
-        raw_text = []
-        for page in reader.pages:
-            page_text = page.extract_text().replace('\x00','')
-            raw_text.append(page_text.replace('\x01',''))
-        contents = '\n'.join(raw_text)            
-        
-    elif file_type == 'txt':        
-        contents = doc.get()['Body'].read().decode('utf-8')
-    elif file_type == 'csv':        
-        body = doc.get()['Body'].read().decode('utf-8')
-        reader = csv.reader(body)        
-        contents = CSVLoader(reader)
-    
-    new_contents = str(contents).replace("\n"," ") 
+def store_document(s3_file_name, requestId):
+    documentInfo = {
+        "S3Path": {
+            "Bucket": s3_bucket,
+            "Key": s3_prefix+'/'+s3_file_name
+        },
+        "Title": s3_file_name,
+        "Id": requestId
+    }
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=100)
-    texts = text_splitter.split_text(new_contents) 
-            
-    return texts
+    documents = [
+        documentInfo
+    ]
+
+    kendra = boto3.client("kendra")
+    result = kendra.batch_put_document(
+        Documents = documents,
+        IndexId = kendraIndex,
+        RoleArn = roleArn
+    )
+    print(result)
 ```
 
-## 답변하기
+### 관련된 문서 가져오기 
 
-VARCO는 User의 요청을 같이 전달하고 응답은 "### Assistant:" 포맷으로 전달되므로, LLM의 응답에서 답변만 골라서 메시지로 전달합니다.
+Kendra를 LangChain의 Retreiver로 설정합니다.
 
 ```python
-answer = llm(text)
-print('answer: ', answer)
+from langchain.retrievers import AmazonKendraRetriever
+retriever = AmazonKendraRetriever(index_id=kendraIndex)
+```
 
+LangChain의 [RetrievalQA](https://api.python.langchain.com/en/latest/chains/langchain.chains.retrieval_qa.base.RetrievalQA.html?highlight=retrievalqa#langchain.chains.retrieval_qa.base.RetrievalQA)와 Kendra Retriever를 이용하여 Query와 관련된 문서를 읽어옵니다.
+
+```python
+prompt_template = """Human: Use the following pieces of context to provide a concise answer to the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
+
+{context}
+
+Question: {question}
+Assistant:"""
+PROMPT = PromptTemplate(
+    template=prompt_template, input_variables=["context", "question"]
+)
+
+qa = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type="stuff",
+    retriever=retriever,
+    return_source_documents=True,
+    chain_type_kwargs={"prompt": PROMPT}
+)
+result = qa({"query": query})
+```
+
+Kendra로 부터 가져온 관련된 문서의 meta data로 부터 reference에 대한 정보를 아래처럼 추출합니다.
+
+```python
+source_documents = result['source_documents']        
+reference = get_reference(source_documents)
+
+def get_reference(docs):
+    reference = "\n\nFrom\n"
+    for doc in docs:
+        name = doc.metadata['title']
+        if(doc.metadata['document_attributes'] != {}):
+            page = doc.metadata['document_attributes']['_excerpt_page_number']
+            reference = reference + f"{page}page in {name}\n"
+        else:
+            reference = reference + f"in {name}\n"
+    return reference
+```
+
+### 답변하기
+
+사용자게 Question을 입력하면 Kendra의 [Characters in query text](https://us-west-2.console.aws.amazon.com/servicequotas/home/services/kendra/quotas/L-7107C1BC) 이하인 경우에 Kendra로 관련된 문서를 조회합니다. 이 숫자는 어플리케이션의 용도에 따라 Quota 변경을 AWS에 요청할 수 있습니다.
+
+```python
+querySize = len(text)
+print('query size: ', querySize)
+
+if querySize<1000: 
+    answer = get_answer_using_template(text)
+else:
+    answer = llm(text)      
+```
+
+VARCO LLM의 응답에서 "### Assistant:" 이하룰 추출하여 사용자에게 메시지의 형태로 전달합니다.
+
+```python
 pos = answer.rfind('### Assistant:\n') + 15
 msg = answer[pos:]
-```
-
-## 읽어온 문서를 Document로 저장하기
-
-아래와 같이 load_document()를 이용하여 S3로 부터 읽어온 문서를 page 단위로 Document()에 저장합니다. 이때 파일이름과 Chunk의 순서를 가지고 metadata를 아래와 같이 정의합니다. 
-```python
-texts = load_document(file_type, object)
-docs = []
-for i in range(len(texts)):
-    docs.append(
-        Document(
-            page_content=texts[i],
-            metadata={
-                'name': object,
-                'page':i+1
-            }
-        )
-    )        
-```
-
-사용자의 편의를 위하여 아래와 같이 읽어온 문서의 3page 내에서 문서의 요약 정보를 제공합니다.
-
-```python
-prompt_template = """Write a concise summary of the following:
-
-{ text }
-                
-CONCISE SUMMARY """
-
-PROMPT = PromptTemplate(template = prompt_template, input_variables = ["text"])
-chain = load_summarize_chain(llm, chain_type = "stuff", prompt = PROMPT)
-summary = chain.run(docs)
-
-pos = summary.rfind('### Assistant:\n') + 15
-msg = summary[pos:]
 ```
 
 ### AWS CDK로 인프라 구현하기
