@@ -147,48 +147,50 @@ def get_reference(docs):
     return reference
 
 def get_answer_using_template(query):
-    relevant_documents = retriever.get_relevant_documents(query)
-    print('length of relevant_documents: ', len(relevant_documents))
+    #relevant_documents = retriever.get_relevant_documents(query)
+    #print('length of relevant_documents: ', len(relevant_documents))
 
-    if(len(relevant_documents)==0):
-        return llm(query)
-    else:
-        print(f'{len(relevant_documents)} documents are fetched which are relevant to the query.')
-        print('----')
-        for i, rel_doc in enumerate(relevant_documents):
-            print(f'## Document {i+1}: {rel_doc.page_content}.......')
-            print('---')
+    #if(len(relevant_documents)==0):
+    #    return llm(query)
+    #else:
+    #    print(f'{len(relevant_documents)} documents are fetched which are relevant to the query.')
+    #    print('----')
+    #    for i, rel_doc in enumerate(relevant_documents):
+    #        print(f'## Document {i+1}: {rel_doc.page_content}.......')
+    #        print('---')
 
-        prompt_template = """Human: Use the following pieces of context to provide a concise answer to the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
+    prompt_template = """Human: Use the following pieces of context to provide a concise answer to the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
-        {context}
+    {context}
 
-        Question: {question}
-        Assistant:"""
-        PROMPT = PromptTemplate(
-            template=prompt_template, input_variables=["context", "question"]
-        )
+    Question: {question}
+    Assistant:"""
+    PROMPT = PromptTemplate(
+        template=prompt_template, input_variables=["context", "question"]
+    )
 
-        qa = RetrievalQA.from_chain_type(
-            llm=llm,
-            chain_type="stuff",
-            retriever=retriever,
-            return_source_documents=True,
-            chain_type_kwargs={"prompt": PROMPT}
-        )
-        result = qa({"query": query})
-        print('result: ', result)
+    qa = RetrievalQA.from_chain_type(
+        llm=llm,
+        chain_type="stuff",
+        retriever=retriever,
+        return_source_documents=True,
+        chain_type_kwargs={"prompt": PROMPT}
+    )
+    result = qa({"query": query})
+    print('result: ', result)
 
-        source_documents = result['source_documents']        
-        print('source_documents: ', source_documents)
+    source_documents = result['source_documents']        
+    print('source_documents: ', source_documents)
+    
+    #if len(source_documents)>=1:
+    #    reference = get_reference(source_documents)
+        # print('reference: ', reference)
 
-        if len(source_documents)>=1:
-            reference = get_reference(source_documents)
-            # print('reference: ', reference)
-
-            return result['result']+reference
-        else:
-            return result['result']
+    #    return result['result']+reference
+    #else:
+    #    return result['result']
+    
+    return result['result']
 
 def lambda_handler(event, context):
     print(event)
