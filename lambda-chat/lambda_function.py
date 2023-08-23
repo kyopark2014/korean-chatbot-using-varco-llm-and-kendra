@@ -139,9 +139,11 @@ def get_reference(docs):
     reference = "\n\nFrom\n"
     for doc in docs:
         name = doc.metadata['title']
-        page = doc.metadata['document_attributes']['_excerpt_page_number']
-    
-        reference = reference + (str(page)+'page in '+name+'\n')
+        if(doc.metadata['document_attributes'] != {}):
+            page = doc.metadata['document_attributes']['_excerpt_page_number']
+            reference = reference + f"{page}page in {name}\n"
+        else:
+            reference = reference + f"in {name}\n"
     return reference
 
 def get_answer_using_template(query):
