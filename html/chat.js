@@ -66,7 +66,7 @@ index = 0;
 addNotifyMessage("start chat with VARCO LLM");
 
 //addReceivedMessage("Wecome to Llama 2. Use the enhance chatbot for question and answering using RAG when you upload a document such as TXT, PDF, or CSV.")
-addReceivedMessage("이것은 VARCO-LLM-KO-13B-IST을 이용한 한국어 챗봇입니다.")
+addReceivedMessage("이것은 VARCO-LLM-KO-13B-IST을 이용한 한국어 챗봇입니다. 원하는 질문을 입력하세요. 아래의 파일 버튼을 선택해 TXT, PDF, CSV 문서를 올리면 좀더 향상된 대화(RAG)를 하실 수 있습니다.")
 
 
 // Listeners
