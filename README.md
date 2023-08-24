@@ -187,9 +187,6 @@ msg = answer[pos:]
 
 ![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/8a152ebd-8010-4918-b81c-4d579ec46018)
 
-다른 질문으로 테스트할 경우에도 아래와 같이 답변합니다.
-
-![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/95c2a9c3-56a4-4793-aad4-61a699e0b543)
 
 ### 리소스 정리하기
 
