@@ -78,11 +78,10 @@ cd korean-chatbot-using-varco-llm-and-kendra/cdk-varco-ko-llm/ && npm install
 
 6) Enpoint들의 주소를 수정합니다. 
 
-LLM과 Embedding에 대한 Endpoint 생성시 얻은 주소로 아래와 같이 "cdk-varco-ko-llm/lib/cdk-varco-ko-llm-stack.ts"을 업데이트 합니다.
-
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/ab865bb2-7f1e-4abd-811d-867fab4d648d)
+LLM과 Embedding에 대한 Endpoint 생성시 얻은 주소로 아래와 같이 "cdk-varco-ko-llm/lib/cdk-varco-ko-llm-stack.ts"을 업데이트 합니다. Endpoint의 이름을 변경하지 않고 기본값을 사용하였다면 다음 단계로 이동합니다. 
 
 
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/3681c139-135e-4ee9-81ae-34039d190ef8)
 
 7) CDK 사용을 위해 Bootstraping을 수행합니다.
 
@@ -105,4 +104,4 @@ cdk deploy
 ```
 9) 설치가 완료되면 브라우저에서 아래와 같이 WebUrl를 확인하여 브라우저를 이용하여 접속합니다.
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/1e01390d-8571-4557-8af6-7a41fd5486aa)
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/251c045f-0b9a-412f-a2fb-b0a987d8301d)
