@@ -31,3 +31,30 @@
 2) [Environment](https://us-east-1.console.aws.amazon.com/cloud9control/home?region=us-east-1#/)에서 “chatbot”를 [Open]한 후에 아래와 같이 터미널을 실행합니다.
 
 ![noname](https://github.com/kyopark2014/chatbot-based-on-Falcon-FM/assets/52392004/b7d0c3c0-3e94-4126-b28d-d269d2635239)
+
+
+3) EBS 크기 변경
+
+아래와 같이 스크립트를 다운로드 합니다. 
+
+```text
+curl https://raw.githubusercontent.com/kyopark2014/technical-summary/main/resize.sh -o resize.sh
+```
+
+이후 아래 명령어로 용량을 100G로 변경합니다.
+```text
+chmod a+rx resize.sh && ./resize.sh 100
+```
+
+
+4) 소스를 다운로드합니다.
+
+```java
+https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra
+```
+
+5) cdk 폴더로 이동하여 필요한 라이브러리를 설치합니다.
+
+```java
+cd korean-chatbot-using-varco-llm-and-kendra/cdk-varco-ko-llm/ && npm install
+```
