@@ -19,7 +19,7 @@ const s3_prefix = 'docs';
 const projectName = `chatbot-varco-kendra-${region}`;
 const bucketName = `storage-for-${projectName}`;
 const endpoint_name = 'endpoint-varco-llm-ko-13b-ist-1';
-const varico_region =  "us-west-2"; // "us-west-2"
+const varco_region =  "us-west-2"; // "us-west-2"
 const enableKendra = 'true'; // for debugging
 const enableReference = 'false';
 
@@ -176,7 +176,7 @@ export class CdkVarcoKoLlmStack extends cdk.Stack {
         s3_bucket: s3Bucket.bucketName,
         s3_prefix: s3_prefix,
         callLogTableName: callLogTableName,
-        varico_region: varico_region,
+        varco_region: varco_region,
         endpoint_name: endpoint_name,
         kendraIndex: cfnIndex.attrId,
         roleArn: roleLambda.roleArn,    
