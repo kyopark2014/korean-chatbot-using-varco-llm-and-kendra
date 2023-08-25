@@ -125,7 +125,7 @@ def store_document(s3_file_name, requestId):
     print(result)
 ```
 
-### 관련된 문서 가져오기 
+### Query와 관련된 문서의 발췌를 Kendra로 부터 가져오기 
 
 Kendra를 LangChain의 Retreiver로 설정합니다.
 
@@ -157,7 +157,7 @@ qa = RetrievalQA.from_chain_type(
 result = qa({"query": query})
 ```
 
-Kendra로 부터 가져온 관련된 문서의 meta data로 부터 reference에 대한 정보를 아래처럼 추출합니다.
+Kendra로 부터 가져온 관련된 문서의 meta data로 부터 reference에 대한 정보를 아래처럼 추출할 수 있습니다.
 
 ```python
 source_documents = result['source_documents']        
@@ -175,9 +175,9 @@ def get_reference(docs):
     return reference
 ```
 
-### 답변하기
+### VARCO LLM에 Query 하기
 
-사용자게 Question을 입력하면 Kendra의 [Characters in query text](https://us-west-2.console.aws.amazon.com/servicequotas/home/services/kendra/quotas/L-7107C1BC) 이하인 경우에 Kendra로 관련된 문서를 조회합니다. 이 숫자는 어플리케이션의 용도에 따라 Quota 변경을 AWS에 요청할 수 있습니다.
+Kendra의 [Characters in query text](https://us-west-2.console.aws.amazon.com/servicequotas/home/services/kendra/quotas/L-7107C1BC)에 따라, 1000 이하(기본값)인 경우에 Kendra로 관련된 문서를 조회할 수 있습니다. 이 숫자는 어플리케이션의 용도에 따라 Quota 변경을 AWS에 요청할 수 있습니다. 아래에서는 1000(기본값) 이하의 질문에 대해 질의를 수행하고 있습니다.
 
 ```python
 querySize = len(text)
@@ -188,6 +188,8 @@ if querySize<1000:
 else:
     answer = llm(text)      
 ```
+
+### VARCO LLM의 결과 전달하기 
 
 VARCO LLM의 응답에서 "### Assistant:" 이하룰 추출하여 사용자에게 메시지의 형태로 전달합니다.
 
