@@ -28,6 +28,7 @@ kendraIndex = os.environ.get('kendraIndex')
 roleArn = os.environ.get('roleArn')
 enableKendra = os.environ.get('enableKendra')
 enableReference = os.environ.get('enableReference')
+enableReference = 'false'
 
 class ContentHandler(LLMContentHandler):
     content_type = "application/json"
