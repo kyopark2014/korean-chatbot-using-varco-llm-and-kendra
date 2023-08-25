@@ -221,7 +221,7 @@ def lambda_handler(event, context):
         elif text == 'enableReference':
             enableReference = 'true'
             msg  = "Referece is enabled"
-        elif text == 'enableReference':
+        elif text == 'disableReference':
             enableReference = 'false'
             msg  = "Reference is disabled"
         else:
