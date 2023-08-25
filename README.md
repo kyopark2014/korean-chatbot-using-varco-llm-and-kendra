@@ -18,11 +18,11 @@ VARCO LLM의 Input은 text와 parameter를 아래와 같이 넣고 있습니다.
 ```java
 {
   "text": "input text here",
-  "request_output_len": 256,
-  "repetition_penalty": 1.15,
-  "temperature": 0.1,
+  "request_output_len": 512,
+  "repetition_penalty": 1.1,
+  "temperature": 0.9,
   "top_k": 50,
-  "top_p": 1
+  "top_p": 0.9
 }
 ```
 VARCO LLM의 Output의 기본 포맷은 아래와 같습니다.
