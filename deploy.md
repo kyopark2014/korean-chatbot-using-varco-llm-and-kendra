@@ -104,3 +104,4 @@ cdk deploy
 ```
 9) 설치가 완료되면 브라우저에서 아래와 같이 WebUrl를 확인하여 브라우저를 이용하여 접속합니다.
 
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/251c045f-0b9a-412f-a2fb-b0a987d8301d)
