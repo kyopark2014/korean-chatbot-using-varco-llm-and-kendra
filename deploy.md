@@ -19,3 +19,15 @@
 아래와 같이 Model 이름으로 "endpoint-varco-llm-ko-13b-ist-1"을 입력하고 아래로 스크롤하여 [Submit]을 선택합니다.
 
 ![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/0bcf8d3a-5e82-4962-bfb6-b991cd0e8ae5)
+
+## CDK를 이용한 인프라 설치하기
+
+여기서는 [Cloud9](https://aws.amazon.com/ko/cloud9/)에서 [AWS CDK](https://aws.amazon.com/ko/cdk/)를 이용하여 인프라를 설치합니다.
+
+1) [Cloud9 Console](https://us-east-1.console.aws.amazon.com/cloud9control/home?region=us-east-1#/create)에 접속하여 [Create environment]-[Name]에서 “chatbot”으로 이름을 입력하고, EC2 instance는 “m5.large”를 선택합니다. 나머지는 기본값을 유지하고, 하단으로 스크롤하여 [Create]를 선택합니다.
+
+![noname](https://github.com/kyopark2014/chatbot-based-on-Falcon-FM/assets/52392004/7c20d80c-52fc-4d18-b673-bd85e2660850)
+
+2) [Environment](https://us-east-1.console.aws.amazon.com/cloud9control/home?region=us-east-1#/)에서 “chatbot”를 [Open]한 후에 아래와 같이 터미널을 실행합니다.
+
+![noname](https://github.com/kyopark2014/chatbot-based-on-Falcon-FM/assets/52392004/b7d0c3c0-3e94-4126-b28d-d269d2635239)
