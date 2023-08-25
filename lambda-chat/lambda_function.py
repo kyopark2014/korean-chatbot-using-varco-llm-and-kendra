@@ -209,6 +209,8 @@ def lambda_handler(event, context):
     msg = ""
     
     if type == 'text':
+        text = body
+
         # debugging
         if text == 'enableKendra':
             enableKendra = 'true'
@@ -223,8 +225,6 @@ def lambda_handler(event, context):
             enableReference = 'false'
             msg  = "Reference is disabled"
         else:
-            text = body
-
             querySize = len(text)
             print('query size: ', querySize)
 
