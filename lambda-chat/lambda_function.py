@@ -215,7 +215,7 @@ def lambda_handler(event, context):
         if text == 'enableKendra':
             enableKendra = 'true'
             msg  = "Kendra is enabled"
-        elif text == 'diableKendra':
+        elif text == 'disableKendra':
             enableKendra = 'false'
             msg  = "Kendra is disabled"
         elif text == 'enableReference':
