@@ -27,7 +27,10 @@
 
 [Enpoint configuration]에서 아래와 같이 "endpoint-varco-llm-ko-13b-ist-1"을 입력합니다. 
 
+
 [Endpoint name]으로 "endpoint-varco-llm-ko-13b-ist-1"을 입력합니다.
+
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/afb94242-2f3c-45ee-92ab-7134db87dfda)
 
 [Endpoint configuration name]에 "endpoint-varco-llm-ko-13b-ist-1"을 입력한 후에 아래에서 [Create endpoint configuration]을 선택합니다. 
 
@@ -35,7 +38,6 @@
 
 ![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/5aba1f72-d86e-46f3-b17b-700f07aed787)
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/afb94242-2f3c-45ee-92ab-7134db87dfda)
 
 
 
