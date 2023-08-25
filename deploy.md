@@ -11,6 +11,7 @@
 
 이후 아래와 같이 [Available launch methods]로 [SageMaker console]을 선택한 다음에 아래로 스크롤하여 [View in Amazon SageMaker]를 선택합니다.
 
+
 ![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/a024b2bf-e68f-4171-9e44-146b76ea187d)
 
 
@@ -19,6 +20,23 @@
 아래와 같이 Model 이름으로 "endpoint-varco-llm-ko-13b-ist-1"을 입력하고 아래로 스크롤하여 [Submit]을 선택합니다.
 
 ![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/0bcf8d3a-5e82-4962-bfb6-b991cd0e8ae5)
+
+
+
+
+
+아래로 스크롤하여 [Endpoint configuration name]에 "endpoint-varco-llm-ko-13b-ist-1"을 입력한 후에 아래에서 [Create endpoint configuration]을 선택합니다. 
+
+이후 [Enpoint configuration]에서 아래와 같이 "endpoint-varco-llm-ko-13b-ist-1"을 선택한 다음에 [Select endpoint configuration]을 선택합니다. 
+
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/5aba1f72-d86e-46f3-b17b-700f07aed787)
+
+
+[Endpoint name]으로 "endpoint-varco-llm-ko-13b-ist-1"을 입력합니다.
+
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/afb94242-2f3c-45ee-92ab-7134db87dfda)
+
+
 
 ## CDK를 이용한 인프라 설치하기
 
@@ -31,7 +49,6 @@
 2) [Environment](https://us-east-1.console.aws.amazon.com/cloud9control/home?region=us-east-1#/)에서 “chatbot”를 [Open]한 후에 아래와 같이 터미널을 실행합니다.
 
 ![noname](https://github.com/kyopark2014/chatbot-based-on-Falcon-FM/assets/52392004/b7d0c3c0-3e94-4126-b28d-d269d2635239)
-
 
 3) EBS 크기 변경
 
@@ -58,30 +75,10 @@ https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra
 ```java
 cd korean-chatbot-using-varco-llm-and-kendra/cdk-varco-ko-llm/ && npm install
 ```
+
 6) Enpoint들의 주소를 수정합니다. 
 
 LLM과 Embedding에 대한 Endpoint 생성시 얻은 주소로 아래와 같이 "cdk-varco-ko-llm/lib/cdk-varco-ko-llm-stack.ts"을 업데이트 합니다.
 
 ![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/ab865bb2-7f1e-4abd-811d-867fab4d648d)
 
-
-
-7) CDK 사용을 위해 Bootstraping을 수행합니다.
-
-아래 명령어로 Account ID를 확인합니다.
-
-```java
-aws sts get-caller-identity --query Account --output text
-```
-
-아래와 같이 bootstrap을 수행합니다. 여기서 "account-id"는 상기 명령어로 확인한 12자리의 Account ID입니다. bootstrap 1회만 수행하면 되므로, 기존에 cdk를 사용하고 있었다면 bootstrap은 건너뛰어도 됩니다.
-
-```java
-cdk bootstrap aws://account-id/ap-northeast-2
-```
-
-8) 인프라를 설치합니다.
-
-```java
-cdk deploy
-```
