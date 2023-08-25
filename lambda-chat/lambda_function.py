@@ -26,6 +26,8 @@ endpoint_name = os.environ.get('endpoint_name')
 varico_region = os.environ.get('varico_region')
 kendraIndex = os.environ.get('kendraIndex')
 roleArn = os.environ.get('roleArn')
+enableKendra = os.environ.get('enableKendra')
+enableReference = os.environ.get('enableReference')
 
 class ContentHandler(LLMContentHandler):
     content_type = "application/json"
@@ -182,7 +184,7 @@ def get_answer_using_template(query):
     source_documents = result['source_documents']        
     print('source_documents: ', source_documents)
     
-    if len(source_documents)>=1:
+    if len(source_documents)>=1 and enableReference == 'true':
         reference = get_reference(source_documents)
         # print('reference: ', reference)
         return result['result']+reference
@@ -212,7 +214,7 @@ def lambda_handler(event, context):
         querySize = len(text)
         print('query size: ', querySize)
 
-        if querySize<1000: 
+        if querySize<1000 and enableKendra=='true': 
             answer = get_answer_using_template(text)
         else:
             answer = llm(text)        

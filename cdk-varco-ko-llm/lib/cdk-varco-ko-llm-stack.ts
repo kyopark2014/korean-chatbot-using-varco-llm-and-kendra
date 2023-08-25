@@ -20,6 +20,8 @@ const projectName = `chatbot-varco-kendra-${region}`;
 const bucketName = `storage-for-${projectName}`;
 const endpoint_name = 'endpoint-varco-llm-ko-13b-ist-1';
 const varico_region =  "us-west-2"; // "us-west-2"
+const enableKendra = 'true'; // for debugging
+const enableReference = 'true';
 
 export class CdkVarcoKoLlmStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -177,7 +179,9 @@ export class CdkVarcoKoLlmStack extends cdk.Stack {
         varico_region: varico_region,
         endpoint_name: endpoint_name,
         kendraIndex: cfnIndex.attrId,
-        roleArn: roleLambda.roleArn,               
+        roleArn: roleLambda.roleArn,    
+        enableKendra: enableKendra,
+        enableReference: enableReference           
       }
     });     
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
