@@ -13,7 +13,7 @@
 
 ## LangChain과 연동하기 
 
-VARCO LLM의 Input은 text와 parameter를 아래와 같이 넣고 있습니다.
+VARCO LLM의 Input형태는 아래와 같습니다.
 
 ```java
 {
