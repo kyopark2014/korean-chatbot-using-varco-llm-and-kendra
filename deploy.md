@@ -58,3 +58,30 @@ https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra
 ```java
 cd korean-chatbot-using-varco-llm-and-kendra/cdk-varco-ko-llm/ && npm install
 ```
+6) Enpoint들의 주소를 수정합니다. 
+
+LLM과 Embedding에 대한 Endpoint 생성시 얻은 주소로 아래와 같이 "cdk-varco-ko-llm/lib/cdk-varco-ko-llm-stack.ts"을 업데이트 합니다.
+
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/ab865bb2-7f1e-4abd-811d-867fab4d648d)
+
+
+
+7) CDK 사용을 위해 Bootstraping을 수행합니다.
+
+아래 명령어로 Account ID를 확인합니다.
+
+```java
+aws sts get-caller-identity --query Account --output text
+```
+
+아래와 같이 bootstrap을 수행합니다. 여기서 "account-id"는 상기 명령어로 확인한 12자리의 Account ID입니다. bootstrap 1회만 수행하면 되므로, 기존에 cdk를 사용하고 있었다면 bootstrap은 건너뛰어도 됩니다.
+
+```java
+cdk bootstrap aws://account-id/ap-northeast-2
+```
+
+8) 인프라를 설치합니다.
+
+```java
+cdk deploy
+```
