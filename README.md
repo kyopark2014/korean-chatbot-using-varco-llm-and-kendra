@@ -85,7 +85,21 @@ VARCO LLM의 parameter는 아래와 같습니다.
 
 ### 문서를 Kendra에 올리기
 
-사용자가 문서를 선택하여 Amazon S3에 올린 후에, 아래와 같이 [batch_put_document](https://docs.aws.amazon.com/ko_kr/kendra/latest/dg/in-adding-binary-doc.html)를 이용하여 Kendra에 등록을 요청합니다.
+여기서는 Kendra에 문서를 등록할때에 S3를 이용합니다. [lambda-upload](./lambda-upload/index.js)에서는 대용량 파일을 쉽게 S3에 올릴수 있도록 [getSignedUrlPromise()](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html)을 이용하여 [presidgned url](https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html)을 생성합니다.
+
+```java
+const URL_EXPIRATION_SECONDS = 300;
+const s3Params = {
+    Bucket: bucketName,
+    Key: s3_prefix + '/' + filename,
+    Expires: URL_EXPIRATION_SECONDS,
+    ContentType: contentType,
+};
+
+const uploadURL = await s3.getSignedUrlPromise('putObject', s3Params);
+```
+
+이후 client가 presigned url을 이용하여 문서 파일을 업로드한 후에, 아래와 같이 [lambda-chat](./lambda-chat/lambda_function.py)은 [batch_put_document](https://docs.aws.amazon.com/ko_kr/kendra/latest/dg/in-adding-binary-doc.html)를 이용하여 Kendra에 등록을 요청합니다.
 
 ```python
 def store_document(s3_file_name, requestId):
