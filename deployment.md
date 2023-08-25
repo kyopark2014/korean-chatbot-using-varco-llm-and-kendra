@@ -18,7 +18,7 @@
 
 
 
-아래와 같이 Model 이름으로 "endpoint-varco-llm-ko-13b-ist-1"을 입력하고 아래로 스크롤하여 [Submit]을 선택합니다.
+아래와 같이 Model 이름으로 "endpoint-varco-llm-ko-13b-ist-1"을 입력하고 아래로 스크롤하여 [Next]을 선택합니다.
 
 ![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/0bcf8d3a-5e82-4962-bfb6-b991cd0e8ae5)
 
