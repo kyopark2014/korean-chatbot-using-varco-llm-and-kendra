@@ -219,7 +219,7 @@ msg = answer[pos:]
 
 한글파일을 올리고 관련 질문을 하면 아래와 같이 파일을 참조하여 응답을 얻을 수 있습니다. 
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/b0e039ff-2b03-4749-9c50-47e2c6102319)
+![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/1c8a39e2-e6c2-4230-86e2-e7f7d13d47c1)
 
 
 ### 리소스 정리하기
