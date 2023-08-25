@@ -28,7 +28,6 @@ kendraIndex = os.environ.get('kendraIndex')
 roleArn = os.environ.get('roleArn')
 enableKendra = os.environ.get('enableKendra')
 enableReference = os.environ.get('enableReference')
-enableReference = 'false'
 
 class ContentHandler(LLMContentHandler):
     content_type = "application/json"
@@ -203,27 +202,41 @@ def lambda_handler(event, context):
     body = event['body']
     print('body: ', body)
 
-    global llm, kendra
+    global llm, kendra, enableKendra, enableReference
 
     start = int(time.time())    
 
     msg = ""
     
     if type == 'text':
-        text = body
-
-        querySize = len(text)
-        print('query size: ', querySize)
-
-        if querySize<1000 and enableKendra=='true': 
-            answer = get_answer_using_template(text)
+        # debugging
+        if text == 'enableKendra':
+            enableKendra = 'true'
+            msg  = "Kendra is enabled"
+        elif text == 'diableKendra':
+            enableKendra = 'false'
+            msg  = "Kendra is disabled"
+        elif text == 'enableReference':
+            enableReference = 'true'
+            msg  = "Referece is enabled"
+        elif text == 'enableReference':
+            enableReference = 'false'
+            msg  = "Reference is disabled"
         else:
-            answer = llm(text)        
-        print('answer: ', answer)
+            text = body
 
-        pos = answer.rfind('### Assistant:\n')+15
-        msg = answer[pos:]    
-            
+            querySize = len(text)
+            print('query size: ', querySize)
+
+            if querySize<1000 and enableKendra=='true': 
+                answer = get_answer_using_template(text)
+            else:
+                answer = llm(text)        
+            print('answer: ', answer)
+
+            pos = answer.rfind('### Assistant:\n')+15
+            msg = answer[pos:]    
+                
     elif type == 'document':
         object = body
 
