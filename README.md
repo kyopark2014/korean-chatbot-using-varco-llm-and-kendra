@@ -13,7 +13,17 @@
 
 ## LangChain과 연동하기 
 
-LangChain은 LLM application의 개발을 도와주는 Framework으로 Question anc Answering, Summarization등 다양한 task에 맞게 Chain등을 활용하여 편리하게 개발할 수 있습니다. VARCO LLM은 SageMaker Endpoint로 배포되므로 아래와 같이 VARCO LLM의 입력과 출력의 포맷을 맞추어서 ContentHandler를 정의합니다. 
+VARCO LLM의 Output은 Json 형태로 전달되며 기본 포맷은 아래와 같습니다.
+
+```java
+{
+  "result": [
+    "output text here"
+  ]
+}
+```
+
+LangChain은 LLM application의 개발을 도와주는 Framework으로 Question anc Answering, Summarization등 다양한 task에 맞게 Chain등을 활용하여 편리하게 개발할 수 있습니다. VARCO LLM은 SageMaker Endpoint로 배포되므로 아래와 같이 VARCO LLM의 입력과 출력의 포맷을 맞추어서 ContentHandler를 정의합니다. 상세한 내용은 [lambda-chat](./lambda-chat/lambda_function.py)에서 확인할 수 있습니다.
 
 ```python
 class ContentHandler(LLMContentHandler):
@@ -59,15 +69,7 @@ VARCO LLM의 parameter는 아래와 같습니다.
 - repetition_penalty: 반복을 제한하기 위한 파라미터로 1.0이면 no panalty입니다. 기본값은 1.3입니다.
 - temperature: 다음 token의 확율(probability)로서 기본값은 0.5입니다.
 
-VARCO LLM의 Output은 Json 형태로 전달되며 기본 포맷은 아래와 같습니다.
 
-```java
-{
-  "result": [
-    "output text here"
-  ]
-}
-```
 
 ### 문서를 Kendra에 올리기
 
