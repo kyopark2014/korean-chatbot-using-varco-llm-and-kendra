@@ -73,7 +73,7 @@ cd korean-chatbot-using-varco-llm-and-kendra/cdk-varco-ko-llm/ && npm install
 
 6) Enpoint들의 주소를 수정합니다. 
 
-LLM과 Embedding에 대한 Endpoint 생성시 얻은 주소로 아래와 같이 "cdk-varco-ko-llm/lib/cdk-varco-ko-llm-stack.ts"을 업데이트 합니다. Endpoint의 이름을 변경하지 않고 기본값을 사용하였다면 다음 단계로 이동합니다. 
+LLM과 Embedding에 대한 Endpoint 생성시 얻은 주소로 아래와 같이 "cdk-varco-ko-llm/lib/cdk-varco-ko-llm-stack.ts"을 업데이트 합니다. Endpoint의 이름을 상기와 동일하게 설정하였다면, 수정없이 다음 단계로 이동합니다. 
 
 
 ![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/3681c139-135e-4ee9-81ae-34039d190ef8)
