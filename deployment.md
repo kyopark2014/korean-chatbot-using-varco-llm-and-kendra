@@ -92,7 +92,7 @@ aws sts get-caller-identity --query Account --output text
 cdk bootstrap aws://[account-id]/us-west-2
 ```
 
-8) 인프라를 설치합니다.
+8) 인프라를 설치합니다. 전체 설치를 위해 약 20분정도 소요됩니다.
 
 ```java
 cdk deploy
