@@ -18,15 +18,15 @@
 
 
 
-아래와 같이 Model 이름으로 "endpoint-varco-llm-ko-13b-ist-1"을 입력하고 아래로 스크롤하여 [Next]을 선택합니다.
+아래와 같이 Model 이름으로 "varco-llm-ko-13b-ist-1"을 입력하고 아래로 스크롤하여 [Next]을 선택합니다.
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/0bcf8d3a-5e82-4962-bfb6-b991cd0e8ae5)
-
-
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/7b21b4e3-6fc0-4803-8adc-64bc07d1ce40)
 
 
 
-아래로 스크롤하여 [Endpoint configuration name]에 "endpoint-varco-llm-ko-13b-ist-1"을 입력한 후에 아래에서 [Create endpoint configuration]을 선택합니다. 
+
+
+다시 아래로 스크롤하여 [Endpoint configuration name]에 "endpoint-varco-llm-ko-13b-ist-1"을 입력한 후에 아래에서 [Create endpoint configuration]을 선택합니다. 
 
 이후 [Enpoint configuration]에서 아래와 같이 "endpoint-varco-llm-ko-13b-ist-1"을 선택한 다음에 [Select endpoint configuration]을 선택합니다. 
 
