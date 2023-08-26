@@ -51,7 +51,7 @@ parameters = {
     "repetition_penalty": 1.1,
     "temperature": 0.1,
     "top_k": 50,
-    "top_p": 0.9
+    "top_p": 0.1
 } 
 
 llm = SagemakerEndpoint(
