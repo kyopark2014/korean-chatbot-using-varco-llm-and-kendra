@@ -157,7 +157,7 @@ const lambdaChatApi = new lambda.DockerImageFunction(this, `lambda-chat-for-${pr
         s3_bucket: s3Bucket.bucketName,
         s3_prefix: s3_prefix,
         callLogTableName: callLogTableName,
-        varico_region: varico_region,
+        varco_region: varco_region,
         endpoint_name: endpoint_name,
         kendraIndex: cfnIndex.attrId,
         roleArn: roleLambda.roleArn,
