@@ -5,7 +5,7 @@
 
 ### LLM
 
-여기서는 Varico LLM을 설치하기 위하여  SageMaker JumbStart에서 Oregon(us-west-2) 리전을 이용합니다. [AWS marketplace](https://aws.amazon.com/marketplace)에 접속하여 "varico"로 검색합니다. 여기서 가장 최신 버전의 "VARCO LLM KO-13B-IST"을 선택합니다. 이후 아래와 같이 [Continue to Subscribe]를 선택하고, 다시 [Continue to configuration]을 선택하여 Subscribe를 합니다. 
+여기서는 VARCO LLM을 설치하기 위하여  SageMaker JumbStart에서 Oregon(us-west-2) 리전을 이용합니다. [AWS marketplace](https://aws.amazon.com/marketplace)에 접속하여 "VARCO"로 검색합니다. 여기서 가장 최신 버전의 "VARCO LLM KO-13B-IST"을 선택합니다. 이후 아래와 같이 [Continue to Subscribe]를 선택하고, 다시 [Continue to configuration]을 선택하여 Subscribe를 합니다. 
 
 ![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/958e7832-6935-4329-b887-7950f01c8e78)
 
