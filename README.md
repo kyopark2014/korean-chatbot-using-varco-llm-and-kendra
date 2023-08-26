@@ -227,8 +227,7 @@ Kendra와 관련된 문서인 [Amazon_Kendra.pdf](./Amazon_Kendra.pdf)를 다운
 
 이후 동일한 질문을 다시하면 기대했던 Kendra에 대한 정보를 확인할 수 있습니다.
 
-![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/9c8569ee-e201-41a6-9442-b6981899a216)
-
+![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/c325b10d-f90c-47a5-a124-45cda722450c)
 
 
 ### 리소스 정리하기
