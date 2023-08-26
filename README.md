@@ -217,9 +217,18 @@ msg = answer[pos:]
 
 ### 실행결과
 
-한글파일을 올리고 관련 질문을 하면 아래와 같이 파일을 참조하여 응답을 얻을 수 있습니다. 
+VARCO LLM 학습시에 Amazon Kendra관련 데이터가 포함되지 않았으므로 아래와 같이 Kendra에 대한 질문을 할 경우에 기대하지 않은 답변을 합니다.
 
-![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/1c8a39e2-e6c2-4230-86e2-e7f7d13d47c1)
+![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/aaf758c6-66f1-4a84-8fd3-b85b9fa487ea)
+
+Kendra와 관련된 문서인 [Amazon_Kendra.pdf](./Amazon_Kendra.pdf)를 다운받은 후에 채팅창의 파일버튼을 선택하여 업로드하면, Kendra에 문서가 등록되고 아래와 같이 문서의 요약(Summarization)을 확인할 수 있습니다.
+
+![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/76d73521-f4bf-45f3-a759-9624ed6d5979)
+
+이후 동일한 질문을 다시하면 기대했던 Kendra에 대한 정보를 확인할 수 있습니다.
+
+![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/9c8569ee-e201-41a6-9442-b6981899a216)
+
 
 
 ### 리소스 정리하기
