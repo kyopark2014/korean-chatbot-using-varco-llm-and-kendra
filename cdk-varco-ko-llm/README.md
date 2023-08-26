@@ -1,6 +1,6 @@
 # CDK 인프라 배포하기
 
-여기서는 [cdk-varco-ko-llm-stack.ts](./cdk-varco-ko-llm/cdk-varco-ko-llm-stack.ts)에서 정의한 인프라 코드에 대하여 설명합니다.
+여기서는 [cdk-varco-ko-llm-stack.ts](./cdk-varco-ko-llm/lib/cdk-varco-ko-llm-stack.ts)에서 정의한 인프라 코드에 대하여 설명합니다.
 
 
 관련 환경 변수는 아래와 같습니다. enpoint 이름은 VARCO LLM을 SageMaker로 설치할때 생성된 "endpoint name"입니다. 필요시 varco_region을 업데이트 합니다.
