@@ -10,7 +10,7 @@ const s3_prefix = 'docs';
 const projectName = `chatbot-varco-kendra-${region}`;
 const bucketName = `storage-for-${projectName}`;
 const endpoint_name = 'endpoint-varco-llm-ko-13b-ist-1';
-const varico_region =  "us-west-2"; // "us-west-2"
+const varco_region =  "us-west-2"; // "us-west-2"
 ```
 
 Chatbot UI를 보여지기 위하여 CloudFront는 S3에 저장된 html, css, image파일을 로드합니다. 또한 S3는 Kendra에 문서 파일을 업로드하기 스토리지로도 사용됩니다.
