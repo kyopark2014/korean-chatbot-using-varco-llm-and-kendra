@@ -49,7 +49,7 @@ client = boto3.client("sagemaker-runtime")
 parameters = {
     "request_output_len": 512,
     "repetition_penalty": 1.1,
-    "temperature": 0.9,
+    "temperature": 0.1,
     "top_k": 50,
     "top_p": 0.9
 } 
