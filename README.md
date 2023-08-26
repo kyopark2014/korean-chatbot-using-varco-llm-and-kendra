@@ -219,15 +219,15 @@ msg = answer[pos:]
 
 VARCO LLM 학습시에 Amazon Kendra관련 데이터가 포함되지 않았으므로 아래와 같이 Kendra에 대한 질문을 할 경우에 기대하지 않은 답변을 합니다.
 
-![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/aaf758c6-66f1-4a84-8fd3-b85b9fa487ea)
+![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/a92418ae-807e-4443-9785-72ba0b4342ac)
 
-Kendra와 관련된 문서인 [Amazon_Kendra.pdf](./Amazon_Kendra.pdf)를 다운받은 후에 채팅창의 파일버튼을 선택하여 업로드하면, Kendra에 문서가 등록되고 아래와 같이 문서의 요약(Summarization)을 확인할 수 있습니다.
+Kendra와 관련된 문서인 [Amazon_Kendra.pdf](./Amazon_Kendra.pdf)를 다운받은 후에 채팅창의 파일버튼을 선택하여 업로드하면, Kendra에 문서가 등록되고 아래와 같이 문서의 요약(Summarization)을 확인할 수 있습니다. Amazon_Kendra.pdf는 Kendra 서비스에 대한 소개자료입니다.
 
-![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/76d73521-f4bf-45f3-a759-9624ed6d5979)
+![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/99790f65-4e73-41af-b6da-ecdb7cb4014d)
 
 이후 동일한 질문을 다시하면 기대했던 Kendra에 대한 정보를 확인할 수 있습니다.
 
-![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/c325b10d-f90c-47a5-a124-45cda722450c)
+![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/e53f7508-3918-44ae-8d55-a292f2d1ba1d)
 
 
 ### 리소스 정리하기
