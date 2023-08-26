@@ -250,3 +250,27 @@ cdk destroy
 
 [Deploy VARCO LLM Model 13B IST Package from AWS Marketplace](https://github.com/ncsoft/ncresearch/blob/main/notebooks/varco_model_13_IST.ipynb)
 
+### Troubleshooting
+
+#### Error: AttributeError: 'kendra' object has no attribute 'retrieve'
+
+SageMaker Endpoint를 이용할때에 LangChain으로 kendra의 retriever를 정의할때 아래와 같은 에러가 발생하였습니다. 결과적으로 Dockerfile의 Python version을 v3.9에서 v3.11로 변경후 해결되었습니다.
+
+```text
+[ERROR] AttributeError: 'kendra' object has no attribute 'retrieve'
+Traceback (most recent call last):
+  File "/var/task/lambda_function.py", line 215, in lambda_handler
+    answer = get_answer_using_template(text)
+  File "/var/task/lambda_function.py", line 148, in get_answer_using_template
+    relevant_documents = retriever.get_relevant_documents(query)
+  File "/var/lang/lib/python3.8/site-packages/langchain/schema/retriever.py", line 208, in get_relevant_documents
+    raise e
+  File "/var/lang/lib/python3.8/site-packages/langchain/schema/retriever.py", line 201, in get_relevant_documents
+    result = self._get_relevant_documents(
+  File "/var/lang/lib/python3.8/site-packages/langchain/retrievers/kendra.py", line 421, in _get_relevant_documents
+    result_items = self._kendra_query(query)
+  File "/var/lang/lib/python3.8/site-packages/langchain/retrievers/kendra.py", line 390, in _kendra_query
+    response = self.client.retrieve(**kendra_kwargs)
+  File "/var/runtime/botocore/client.py", line 876, in __getattr__
+    raise AttributeError(
+```
