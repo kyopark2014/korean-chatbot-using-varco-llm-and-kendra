@@ -76,18 +76,18 @@ chmod a+rx resize.sh && ./resize.sh 80
 4) 소스를 다운로드합니다.
 
 ```java
-git clone https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-opensearch
+git clone https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra
 ```
 
 5) cdk 폴더로 이동하여 필요한 라이브러리를 설치합니다.
 
 ```java
-cd korean-chatbot-using-varco-llm-and-opensearch/cdk-varco-opensearch/ && npm install
+cd korean-chatbot-using-varco-llm-and-kendra/cdk-varco-ko-llm/ && npm install
 ```
 
 6) Enpoint들의 주소를 수정합니다. 
 
-LLM과 Embedding에 대한 Endpoint 생성시 얻은 주소로 아래와 같이 "cdk-varco-opensearch/lib/cdk-varco-opensearch-stack.ts"을 업데이트 합니다. Endpoint의 이름을 상기와 동일하게 설정하였다면, 수정없이 다음 단계로 이동합니다. 
+LLM과 Embedding에 대한 Endpoint 생성시 얻은 주소로 아래와 같이 "cdk-varco-ko-llm/lib/cdk-varco-ko-llm-stack.ts"을 업데이트 합니다. Endpoint의 이름을 상기와 동일하게 설정하였다면, 수정없이 다음 단계로 이동합니다. 
 
 
 ![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-opensearch/assets/52392004/099f7e52-6bb0-42a0-b982-3d9f7964c0d4)
