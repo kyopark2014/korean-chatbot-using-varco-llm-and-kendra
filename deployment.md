@@ -3,33 +3,46 @@
 
 ## LLM과 Embedding Endpoint 설치하기
 
-### LLM
-
 여기서는 VARCO LLM을 설치하기 위하여  SageMaker JumbStart에서 Oregon(us-west-2) 리전을 이용합니다. [AWS marketplace](https://aws.amazon.com/marketplace)에 접속하여 "VARCO"로 검색합니다. 여기서 가장 최신 버전의 "VARCO LLM KO-13B-IST"을 선택합니다. 이후 아래와 같이 [Continue to Subscribe]를 선택하고, 다시 [Continue to configuration]을 선택하여 Subscribe를 합니다. 
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/958e7832-6935-4329-b887-7950f01c8e78)
-
+![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-opensearch/assets/52392004/aa8e1c9f-383e-4ad1-8a5c-af784b21e6cf)
 
 이후 아래와 같이 [Available launch methods]로 [SageMaker console]을 선택한 다음에 아래로 스크롤하여 [View in Amazon SageMaker]를 선택합니다.
 
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/a024b2bf-e68f-4171-9e44-146b76ea187d)
+![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-opensearch/assets/52392004/9606ee1a-1531-4f3b-91d4-a4a9fa021ef5)
+
 
 아래와 같이 Model 이름으로 "varco-llm-ko-13b-ist-1"을 입력하고 아래로 스크롤하여 [Next]을 선택합니다.
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/7b21b4e3-6fc0-4803-8adc-64bc07d1ce40)
+
+![image](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-opensearch/assets/52392004/4da77ce8-3693-44fe-a36d-bc21ac622483)
 
 
-[Endpoint name]과 [Enpoint configuration]에서 아래와 같이 "endpoint-varco-llm-ko-13b-ist-1"로 입력합니다. 
+아래와 같이 [Endpoint Name]과 [Enpoint configuration name]을 "endpoint-varco-llm-ko-13b-ist-1"로 입력합니다. 
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/afb94242-2f3c-45ee-92ab-7134db87dfda)
 
-[Endpoint configuration name]에 "endpoint-varco-llm-ko-13b-ist-1"을 입력한 후에 아래에서 [Create endpoint configuration]을 선택합니다. 
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-opensearch/assets/52392004/c0a6a862-7fc8-4391-b10b-ade001cd8ba0)
 
-이후 [Select endpoint configuration]을 선택합니다. 
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm/assets/52392004/5aba1f72-d86e-46f3-b17b-700f07aed787)
 
+
+
+아래로 스크롤하여 [Variants] - [Production]에서 아래와 같이 [Create production variant]을 선택합니다.
+
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-opensearch/assets/52392004/4b212253-b85d-4e02-bb45-341839b36833)
+
+이후 [Add model]에서 "varco-llm-ko-13b-ist-1"을 선택한 후에 [Save]를 선택합니다. 이후 아래와 같이 [Edit]를 선택합니다.
+
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-opensearch/assets/52392004/316e9319-3d78-4744-9c56-4a3bc3e935ed)
+
+이후 아래와 같이 [Instance type]을 "ml.g5.12xlarge"로 선택하고 [Save]를 선택합니다.
+
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-opensearch/assets/52392004/85d13822-59e2-4cdc-89d8-06e1c1d694da)
+
+이후 아래로 스크롤하여 [Create endpoint configuration]을 선택합니다. 
+
+Endpoint configuration 생성이 성공하면, 아래로 스크롤하여 [Submit]을 선택합니다.
 
 
 
@@ -44,6 +57,7 @@
 2) [Environment](https://us-east-1.console.aws.amazon.com/cloud9control/home?region=us-east-1#/)에서 “chatbot”를 [Open]한 후에 아래와 같이 터미널을 실행합니다.
 
 ![noname](https://github.com/kyopark2014/chatbot-based-on-Falcon-FM/assets/52392004/b7d0c3c0-3e94-4126-b28d-d269d2635239)
+
 
 3) EBS 크기 변경
 
@@ -62,21 +76,22 @@ chmod a+rx resize.sh && ./resize.sh 80
 4) 소스를 다운로드합니다.
 
 ```java
-git clone https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra
+git clone https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-opensearch
 ```
 
 5) cdk 폴더로 이동하여 필요한 라이브러리를 설치합니다.
 
 ```java
-cd korean-chatbot-using-varco-llm-and-kendra/cdk-varco-ko-llm/ && npm install
+cd korean-chatbot-using-varco-llm-and-opensearch/cdk-varco-opensearch/ && npm install
 ```
 
 6) Enpoint들의 주소를 수정합니다. 
 
-LLM과 Embedding에 대한 Endpoint 생성시 얻은 주소로 아래와 같이 "cdk-varco-ko-llm/lib/cdk-varco-ko-llm-stack.ts"을 업데이트 합니다. Endpoint의 이름을 상기와 동일하게 설정하였다면, 수정없이 다음 단계로 이동합니다. 
+LLM과 Embedding에 대한 Endpoint 생성시 얻은 주소로 아래와 같이 "cdk-varco-opensearch/lib/cdk-varco-opensearch-stack.ts"을 업데이트 합니다. Endpoint의 이름을 상기와 동일하게 설정하였다면, 수정없이 다음 단계로 이동합니다. 
 
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/3681c139-135e-4ee9-81ae-34039d190ef8)
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-opensearch/assets/52392004/099f7e52-6bb0-42a0-b982-3d9f7964c0d4)
+
 
 7) CDK 사용을 위해 Bootstraping을 수행합니다.
 
@@ -99,4 +114,4 @@ cdk deploy
 ```
 9) 설치가 완료되면 브라우저에서 아래와 같이 WebUrl를 확인하여 브라우저를 이용하여 접속합니다.
 
-![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-kendra/assets/52392004/251c045f-0b9a-412f-a2fb-b0a987d8301d)
+![noname](https://github.com/kyopark2014/korean-chatbot-using-varco-llm-and-opensearch/assets/52392004/4f48430b-2d8f-4809-bce2-7445677df4c7)
