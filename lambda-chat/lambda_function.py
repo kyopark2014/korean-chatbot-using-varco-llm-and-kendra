@@ -17,6 +17,8 @@ from langchain.document_loaders import CSVLoader
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain.retrievers import AmazonKendraRetriever
+from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
 
 s3 = boto3.client('s3')
 s3_bucket = os.environ.get('s3_bucket') # bucket name
@@ -28,6 +30,7 @@ kendraIndex = os.environ.get('kendraIndex')
 roleArn = os.environ.get('roleArn')
 enableKendra = os.environ.get('enableKendra')
 enableReference = os.environ.get('enableReference')
+enableRAG = os.environ.get('enableRAG', 'true')
 
 class ContentHandler(LLMContentHandler):
     content_type = "application/json"
@@ -61,6 +64,12 @@ llm = SagemakerEndpoint(
     endpoint_kwargs={"CustomAttributes": "accept_eula=true"},
     content_handler = content_handler
 )
+
+# memory for retrival docs
+memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True, input_key="question", output_key='answer', human_prefix='Human', ai_prefix='AI')
+# memory for conversation
+chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='AI')
+
 retriever = AmazonKendraRetriever(index_id=kendraIndex)
 
 # store document into Kendra
@@ -148,6 +157,57 @@ def get_reference(docs):
             reference = reference + f"in {name}\n"
     return reference
 
+def get_answer_using_template_with_history(query, chat_memory):  
+    condense_template = """Given the following conversation and a follow up question, answer friendly. If you don't know the answer, just say that you don't know, don't try to make up an answer.
+    Chat History:
+    {chat_history}
+    Human: {question}
+    AI:"""
+    CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(condense_template)
+    
+    qa = ConversationalRetrievalChain.from_llm(
+        llm=llm, 
+        retriever=retriever,       
+        condense_question_prompt=CONDENSE_QUESTION_PROMPT, # chat history and new question
+        chain_type='stuff', # 'refine'
+        verbose=False, # for logging to stdout
+        rephrase_question=True,  # to pass the new generated question to the combine_docs_chain
+        
+        memory=memory,
+        #max_tokens_limit=300,
+        return_source_documents=True, # retrieved source
+        return_generated_question=False, # generated question
+    )
+
+    # combine any retrieved documents.
+    prompt_template = """Human: Use the following pieces of context to provide a concise answer to the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
+
+    {context}
+
+    Question: {question}
+    AI:"""
+    qa.combine_docs_chain.llm_chain.prompt = PromptTemplate.from_template(prompt_template) 
+    
+    # extract chat history
+    chats = chat_memory.load_memory_variables({})
+    chat_history = chats['history']
+    print('chat_history: ', chat_history)
+
+    # make a question using chat history
+    result = qa({"question": query, "chat_history": chat_history})    
+    print('result: ', result)    
+    
+    # get the reference
+    source_documents = result['source_documents']
+    print('source_documents: ', source_documents)
+
+    if len(source_documents)>=1 and enableReference == 'true':
+        reference = get_reference(source_documents)
+        #print('reference: ', reference)
+        return result['answer']+reference
+    else:
+        return result['answer']
+
 def get_answer_using_template(query):
     #relevant_documents = retriever.get_relevant_documents(query)
     #print('length of relevant_documents: ', len(relevant_documents))
@@ -202,7 +262,8 @@ def lambda_handler(event, context):
     body = event['body']
     print('body: ', body)
 
-    global llm, kendra, enableKendra, enableReference
+    global llm, kendra
+    global enableRAG, enableReference, enableConversationMode
 
     start = int(time.time())    
 
@@ -211,32 +272,44 @@ def lambda_handler(event, context):
     if type == 'text':
         text = body
 
+        querySize = len(text)
+        print('query size: ', querySize)
+
         # debugging
-        if text == 'enableKendra':
-            enableKendra = 'true'
-            msg  = "Kendra is enabled"
-        elif text == 'disableKendra':
-            enableKendra = 'false'
-            msg  = "Kendra is disabled"
-        elif text == 'enableReference':
+        if text == 'enableReference':
             enableReference = 'true'
             msg  = "Referece is enabled"
         elif text == 'disableReference':
             enableReference = 'false'
             msg  = "Reference is disabled"
+        elif text == 'enableConversationMode':
+            enableConversationMode = 'true'
+            msg  = "onversationMode is enabled"
+        elif text == 'disableConversationMode':
+            enableConversationMode = 'false'
+            msg  = "onversationMode is disabled"
+        elif text == 'enableRAG':
+            enableRAG = 'true'
+            msg  = "RAG is enabled"
+        elif text == 'disableRAG':
+            enableRAG = 'false'
+            msg  = "RAG is disabled"
         else:
-            querySize = len(text)
-            print('query size: ', querySize)
-
-            if querySize<1000 and enableKendra=='true': 
-                answer = get_answer_using_template(text)
+            
+            if querySize<1000 and enableRAG=='true': 
+                if enableConversationMode == 'true':
+                    answer = get_answer_using_template_with_history(text, chat_memory)
+                else:
+                    answer = get_answer_using_template(text)
             else:
                 answer = llm(text)        
             print('answer: ', answer)
 
             pos = answer.rfind('### Assistant:\n')+15
             msg = answer[pos:]    
-                
+        #print('msg: ', msg)
+        chat_memory.save_context({"input": text}, {"output": msg})
+            
     elif type == 'document':
         object = body
 
