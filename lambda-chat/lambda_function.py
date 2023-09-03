@@ -133,11 +133,11 @@ def summerize_text(text):
             page_content=text
         )
     ]
-    prompt_template = """Write a concise summary of the following:
-
-    {text}
+    prompt_template = """다음 텍스트를 간결하게 요약하십시오. 
+    
+    TEXT: {text}
                 
-    CONCISE SUMMARY """
+    SUMMARY:"""
 
     PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
     chain = load_summarize_chain(llm, chain_type="stuff", prompt=PROMPT)
@@ -158,11 +158,12 @@ def get_reference(docs):
     return reference
 
 def get_answer_using_template_with_history(query, chat_memory):  
-    condense_template = """Given the following conversation and a follow up question, answer friendly. If you don't know the answer, just say that you don't know, don't try to make up an answer.
-    Chat History:
+    condense_template = """아래의 대화 내용을 고려하여 친구처럼 친절하게 대답해줘. 새로운 질문에만 대답하고, 모르면 모른다고 해.
+    
     {chat_history}
-    Human: {question}
-    AI:"""
+    
+    User: {question}
+    Assistant:"""    
     CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(condense_template)
     
     qa = ConversationalRetrievalChain.from_llm(
@@ -180,12 +181,14 @@ def get_answer_using_template_with_history(query, chat_memory):
     )
 
     # combine any retrieved documents.
-    prompt_template = """Human: Use the following pieces of context to provide a concise answer to the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
+    prompt_template = """다음은 User와 Assistant의 친근한 대화입니다. 
+Assistant은 말이 많고 상황에 맞는 구체적인 세부 정보를 많이 제공합니다. 
+Assistant는 모르는 질문을 받으면 솔직히 모른다고 말합니다.
 
     {context}
 
     Question: {question}
-    AI:"""
+    Assistant:"""
     qa.combine_docs_chain.llm_chain.prompt = PromptTemplate.from_template(prompt_template) 
     
     # extract chat history
@@ -221,7 +224,9 @@ def get_answer_using_template(query):
     #        print(f'## Document {i+1}: {rel_doc.page_content}.......')
     #        print('---')
 
-    prompt_template = """Human: Use the following pieces of context to provide a concise answer to the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
+    prompt_template = """다음은 User와 Assistant의 친근한 대화입니다. 
+Assistant은 말이 많고 상황에 맞는 구체적인 세부 정보를 많이 제공합니다. 
+Assistant는 모르는 질문을 받으면 솔직히 모른다고 말합니다.
 
     {context}
 
@@ -327,12 +332,11 @@ def lambda_handler(event, context):
             ) for t in texts[:3]
         ]
         
-        # summerization to show the document
-        prompt_template = """Write a concise summary of the following:
-
-        {text}
+        prompt_template = """다음 텍스트를 간결하게 요약하십시오. 
+    
+        TEXT: {text}
                 
-        CONCISE SUMMARY """
+        SUMMARY:"""
 
         PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
         chain = load_summarize_chain(llm, chain_type="stuff", prompt=PROMPT)
