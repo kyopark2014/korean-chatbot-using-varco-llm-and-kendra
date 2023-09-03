@@ -21,7 +21,7 @@ const bucketName = `storage-for-${projectName}`;
 const endpoint_name = 'endpoint-varco-llm-ko-13b-ist-1';
 const varco_region =  "us-west-2"; // "us-west-2"
 const enableReference = 'false';
-const enableConversationMode = 'true'; 
+const enableConversationMode = 'false'; 
 const enableRAG = 'true';
 
 export class CdkVarcoKoLlmStack extends cdk.Stack {
