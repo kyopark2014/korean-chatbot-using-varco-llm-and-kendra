@@ -28,9 +28,9 @@ endpoint_name = os.environ.get('endpoint_name')
 varco_region = os.environ.get('varco_region')
 kendraIndex = os.environ.get('kendraIndex')
 roleArn = os.environ.get('roleArn')
-enableKendra = os.environ.get('enableKendra')
 enableReference = os.environ.get('enableReference')
 enableRAG = os.environ.get('enableRAG', 'true')
+enableConversationMode = os.environ.get('enableConversationMode', 'true')
 
 class ContentHandler(LLMContentHandler):
     content_type = "application/json"
