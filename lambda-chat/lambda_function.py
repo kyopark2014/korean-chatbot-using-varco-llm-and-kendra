@@ -56,6 +56,8 @@ parameters = {
     "top_k": 50,
     "top_p": 0.1
 } 
+HUMAN_PROMPT = "\n\nHuman:"
+AI_PROMPT = "\n\nAssistant:"
 
 llm = SagemakerEndpoint(
     endpoint_name = endpoint_name, 
@@ -133,11 +135,11 @@ def summerize_text(text):
             page_content=text
         )
     ]
-    prompt_template = """다음 텍스트를 간결하게 요약하십시오. 
+    prompt_template = """\n\nHuman: 다음 텍스트를 간결하게 요약하십시오. 
     
     TEXT: {text}
                 
-    SUMMARY:"""
+    Assistant: """
 
     PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
     chain = load_summarize_chain(llm, chain_type="stuff", prompt=PROMPT)
@@ -163,7 +165,7 @@ def get_answer_using_template_with_history(query, chat_memory):
     {chat_history}
     
     User: {question}
-    Assistant:"""    
+    Assistant: """    
     CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(condense_template)
     
     qa = ConversationalRetrievalChain.from_llm(
@@ -181,14 +183,15 @@ def get_answer_using_template_with_history(query, chat_memory):
     )
 
     # combine any retrieved documents.
-    prompt_template = """다음은 User와 Assistant의 친근한 대화입니다. 
+    prompt_template = """\n\nHuman: 다음은 User와 Assistant의 친근한 대화입니다. 
 Assistant은 말이 많고 상황에 맞는 구체적인 세부 정보를 많이 제공합니다. 
 Assistant는 모르는 질문을 받으면 솔직히 모른다고 말합니다.
 
     {context}
 
     Question: {question}
-    Assistant:"""
+
+    Assistant: """
     qa.combine_docs_chain.llm_chain.prompt = PromptTemplate.from_template(prompt_template) 
     
     # extract chat history
@@ -239,14 +242,15 @@ def get_answer_using_template(query):
     #        print(f'## Document {i+1}: {rel_doc.page_content}.......')
     #        print('---')
 
-    prompt_template = """다음은 User와 Assistant의 친근한 대화입니다. 
+    prompt_template = """\n\nHuman: 다음은 User와 Assistant의 친근한 대화입니다. 
 Assistant은 말이 많고 상황에 맞는 구체적인 세부 정보를 많이 제공합니다. 
 Assistant는 모르는 질문을 받으면 솔직히 모른다고 말합니다.
 
     {context}
 
     Question: {question}
-    Assistant:"""
+
+    Assistant: """
     PROMPT = PromptTemplate(
         template=prompt_template, input_variables=["context", "question"]
     )
@@ -322,7 +326,7 @@ def lambda_handler(event, context):
                 else:
                     answer = get_answer_using_template(text)
             else:
-                answer = llm(text)        
+                answer = llm(HUMAN_PROMPT+text+AI_PROMPT)      
             print('answer: ', answer)
 
             pos = answer.rfind('### Assistant:\n')+15
