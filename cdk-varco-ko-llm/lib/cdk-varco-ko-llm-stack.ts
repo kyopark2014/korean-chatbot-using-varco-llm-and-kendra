@@ -110,6 +110,15 @@ export class CdkVarcoKoLlmStack extends cdk.Stack {
       name: `reg-kendra-${projectName}`,
       roleArn: roleKendra.roleArn,
     });     
+    const kendraLogPolicy = new iam.PolicyStatement({
+        resources: ['*'],
+        actions: ["logs:*", "cloudwatch:GenerateQuery"],
+      });
+      roleKendra.attachInlinePolicy( // add kendra policy
+        new iam.Policy(this, `kendra-log-policy-for-${projectName}`, {
+          statements: [kendraLogPolicy],
+        }),
+      );    
     new cdk.CfnOutput(this, `index-of-kendra-for-${projectName}`, {
       value: cfnIndex.attrId,
       description: 'The index of kendra',
